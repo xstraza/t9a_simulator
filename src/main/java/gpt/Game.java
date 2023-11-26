@@ -4,30 +4,31 @@ import java.util.Random;
 public class Game {
 
     public void performAttack(Model attacker, Model defender) {
-        // 2. Determine number of hits (simplified here)
+        // 2. Determine number of hits
         int hits = calculateHits(attacker, defender);
 
-        // 4. Attacker rolls to wound
-        boolean wound = rollToWound(attacker, defender);
+        for (int i = 0; i < hits; i++) {
+            // 4. Attacker rolls to wound
+            boolean wound = rollToWound(attacker, defender);
 
-        if (wound) {
-            // 5. Defender makes Armour Save
-            boolean armorSave = rollForArmorSave(defender, attacker);
+            if (wound) {
+                // 5. Defender makes Armour Save
+                boolean armorSave = rollForArmorSave(defender, attacker);
 
-            if (!armorSave) {
-                // 6. Defender makes Special Save
-                boolean specialSave = rollForSpecialSave(defender);
+                if (!armorSave) {
+                    // 6. Defender makes Special Save (not fully implemented)
+                    boolean specialSave = rollForSpecialSave(defender);
 
-                if (!specialSave) {
-                    // 7 & 8. Defender suffers unsaved wounds and loses Health Points
-//                    defender.getHealthPoints() -= 1; // Assuming 1 wound per attack for simplicity
+                    if (!specialSave) {
+                        // 7 & 8. Defender suffers unsaved wounds and loses Health Points
+//                        defender.defensiveProfile.reduceHealthPoints(1); // Reduce health by 1 for each unsaved wound
 
-                    // 9. Defender removes casualties (if health points reach 0)
-                    if (defender.getHealthPoints() <= 0) {
-                        removeCasualty(defender);
+                        // 9. Defender removes casualties (if health points reach 0)
+                        if (defender.getHealthPoints() <= 0) {
+                            removeCasualty(defender);
+                        }
+                        // 10. Panic Tests if necessary (not implemented here)
                     }
-
-                    // 10. Panic Tests if necessary (not implemented here)
                 }
             }
         }
