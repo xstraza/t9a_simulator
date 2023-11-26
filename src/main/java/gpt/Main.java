@@ -9,7 +9,7 @@ public class Main {
         Model spearman = modelFactory.createHighElfFactory().createSpearman();
         Model archer = modelFactory.createHighElfFactory().createArcher();
         Game game = new Game();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             game.performAttack(spearman, archer);
             System.out.println();
         }
