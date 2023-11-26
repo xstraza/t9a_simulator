@@ -1,13 +1,19 @@
 package gpt;
 
 
+import java.util.List;
+
 public class Model {
     OffensiveProfile offensiveProfile;
     DefensiveProfile defensiveProfile;
+    List<Armor> armor;
+    Weapon weapon;
 
-    public Model(int attacks, int offensiveSkill, int strength, int armorPenetration, int agility, int healthPoints, int defensiveSkill, int resilience, int armor) {
-        this.offensiveProfile = new OffensiveProfile(attacks, offensiveSkill, strength, armorPenetration, agility);
-        this.defensiveProfile = new DefensiveProfile(healthPoints, defensiveSkill, resilience, armor);
+    public Model(OffensiveProfile offensiveProfile, DefensiveProfile defensiveProfile, List<Armor> armor, Weapon weapon) {
+        this.offensiveProfile = offensiveProfile;
+        this.defensiveProfile = defensiveProfile;
+        this.armor = armor;
+        this.weapon = weapon;
     }
 
     public int getSpecialSave() {
