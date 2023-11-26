@@ -6,7 +6,7 @@ public class Game {
 
     public void performAttack(Model attacker, Model defender) {
         int hits = calculateHits(attacker, defender);
-        System.out.println(hits + " hits!");
+        System.out.println(hits + " hit(s)!");
         for (int i = 0; i < hits; i++) {
             boolean wound = rollToWound(attacker, defender);
             if (!wound) {
@@ -40,18 +40,29 @@ public class Game {
     private boolean rollToWound(Model attacker, Model defender) {
         int neededRoll = determineNeededRoll(attacker.getStrength(), defender.getResilience());
         int roll = new Random().nextInt(6) + 1;
+        System.out.println("rolled " + roll + " to wound!");
         return roll >= neededRoll;
     }
 
     private boolean rollForArmorSave(Model defender, Model attacker) {
         int neededRoll = 7 - defender.getArmor() + attacker.getArmorPenetration();
+        if (neededRoll > 6) {
+            System.out.println("no armor save available!");
+            return false;
+        }
         int roll = new Random().nextInt(6) + 1;
+        System.out.println("rolled " + roll + " to armor save!");
         return roll >= neededRoll;
     }
 
     private boolean rollForSpecialSave(Model defender) {
         int neededRoll = defender.getSpecialSave();
+        if (neededRoll > 6) {
+            System.out.println("no special save available!");
+            return false;
+        }
         int roll = new Random().nextInt(6) + 1;
+        System.out.println("rolled " + roll + " to special save!");
         return roll >= neededRoll;
     }
 
@@ -73,6 +84,7 @@ public class Game {
 
         for (int i = 0; i < attacker.getAttacks(); i++) {
             int roll = random.nextInt(6) + 1;
+            System.out.println("rolled " + roll + " to hit!");
             if ((roll >= neededRoll && roll != 1) || roll == 6) {
                 hits++;
             }
