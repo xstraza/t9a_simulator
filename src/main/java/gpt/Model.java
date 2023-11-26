@@ -12,7 +12,7 @@ public class Model {
 
     public int getSpecialSave() {
         //todo;
-        return -1;
+        return 10;
     }
 
     public int getHealthPoints() {

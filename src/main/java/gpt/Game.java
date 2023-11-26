@@ -1,35 +1,38 @@
 package gpt;
+
 import java.util.Random;
 
 public class Game {
 
     public void performAttack(Model attacker, Model defender) {
-        // 2. Determine number of hits
         int hits = calculateHits(attacker, defender);
-
+        System.out.println(hits + " hits!");
         for (int i = 0; i < hits; i++) {
-            // 4. Attacker rolls to wound
             boolean wound = rollToWound(attacker, defender);
-
-            if (wound) {
-                // 5. Defender makes Armour Save
-                boolean armorSave = rollForArmorSave(defender, attacker);
-
-                if (!armorSave) {
-                    // 6. Defender makes Special Save (not fully implemented)
-                    boolean specialSave = rollForSpecialSave(defender);
-
-                    if (!specialSave) {
-                        // 7 & 8. Defender suffers unsaved wounds and loses Health Points
+            if (!wound) {
+                System.out.println("no wound!");
+                continue;
+            }
+            System.out.println("wounded!");
+            boolean armorSave = rollForArmorSave(defender, attacker);
+            if (armorSave) {
+                System.out.println("armour saved!");
+                continue;
+            }
+            System.out.println("armour save failed!");
+            boolean specialSave = rollForSpecialSave(defender);
+            if (specialSave) {
+                System.out.println("special saved!");
+                continue;
+            }
+            System.out.println("special save failed!");
+            // 7 & 8. Defender suffers unsaved wounds and loses Health Points
 //                        defender.defensiveProfile.reduceHealthPoints(1); // Reduce health by 1 for each unsaved wound
-
-                        // 9. Defender removes casualties (if health points reach 0)
-                        if (defender.getHealthPoints() <= 0) {
-                            removeCasualty(defender);
-                        }
-                        // 10. Panic Tests if necessary (not implemented here)
-                    }
-                }
+            if (defender.getHealthPoints() <= 0) {
+                System.out.println("defender dead!");
+                removeCasualty(defender);
+            } else {
+                System.out.println("defender alive!");
             }
         }
     }
