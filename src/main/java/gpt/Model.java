@@ -19,5 +19,33 @@ public class Model {
         //todo
         return defensiveProfile.hp();
     }
+
+    public int getResilience() {
+        return defensiveProfile.resilience();
+    }
+
+    public int getArmor() {
+        return defensiveProfile.armour();
+    }
+
+    public int getOffensiveSkill() {
+        return offensiveProfile.offensiveSkill();
+    }
+
+    public int getDefensiveSkill() {
+        return defensiveProfile.defensiveSkill();
+    }
+
+    public int getStrength() {
+        return offensiveProfile.strength();
+    }
+
+    public int getAttacks() {
+        return offensiveProfile.attacks();
+    }
+
+    public int getArmorPenetration() {
+        return offensiveProfile.armourPenetration();
+    }
 }
 

@@ -3,16 +3,16 @@ import java.util.Random;
 
 public class Game {
 
-    public void performAttack(Attack attack, Model attacker, Model defender) {
+    public void performAttack(Model attacker, Model defender) {
         // 2. Determine number of hits (simplified here)
-        int hits = calculateHits(attack, attacker, defender);
+        int hits = calculateHits(attacker, defender);
 
         // 4. Attacker rolls to wound
-        boolean wound = rollToWound(attack, defender);
+        boolean wound = rollToWound(attacker, defender);
 
         if (wound) {
             // 5. Defender makes Armour Save
-            boolean armorSave = rollForArmorSave(defender, attack);
+            boolean armorSave = rollForArmorSave(defender, attacker);
 
             if (!armorSave) {
                 // 6. Defender makes Special Save
@@ -20,7 +20,7 @@ public class Game {
 
                 if (!specialSave) {
                     // 7 & 8. Defender suffers unsaved wounds and loses Health Points
-                    defender.healthPoints -= 1; // Assuming 1 wound per attack for simplicity
+//                    defender.getHealthPoints() -= 1; // Assuming 1 wound per attack for simplicity
 
                     // 9. Defender removes casualties (if health points reach 0)
                     if (defender.getHealthPoints() <= 0) {
@@ -33,14 +33,14 @@ public class Game {
         }
     }
 
-    private boolean rollToWound(Attack attack, Model defender) {
-        int neededRoll = determineNeededRoll(attack.strength, defender.resilience);
+    private boolean rollToWound(Model attacker, Model defender) {
+        int neededRoll = determineNeededRoll(attacker.getStrength(), defender.getResilience());
         int roll = new Random().nextInt(6) + 1;
         return roll >= neededRoll;
     }
 
-    private boolean rollForArmorSave(Model defender, Attack attack) {
-        int neededRoll = 7 - defender.armor + attack.armorPenetration;
+    private boolean rollForArmorSave(Model defender, Model attacker) {
+        int neededRoll = 7 - defender.getArmor() + attacker.getArmorPenetration();
         int roll = new Random().nextInt(6) + 1;
         return roll >= neededRoll;
     }
@@ -60,14 +60,14 @@ public class Game {
         return 6; // difference <= -2
     }
 
-    private int calculateHits(Attack attack, Model attacker, Model defender) {
+    private int calculateHits(Model attacker, Model defender) {
         int hits = 0;
         Random random = new Random();
-        int toHitDifference = attacker.offensiveSkill - defender.defensiveSkill;
+        int toHitDifference = attacker.getOffensiveSkill() - defender.getDefensiveSkill();
 
         int neededRoll = determineNeededToHitRoll(toHitDifference);
 
-        for (int i = 0; i < attack.attackValue; i++) {
+        for (int i = 0; i < attacker.getAttacks(); i++) {
             int roll = random.nextInt(6) + 1;
             if ((roll >= neededRoll && roll != 1) || roll == 6) {
                 hits++;
