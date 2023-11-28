@@ -3,70 +3,99 @@ package gpt;
 import gpt.attack_attribute.AttackEvent;
 import gpt.model.Model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Game {
 
-    public void performAttack(Model attacker, Model defender) {
-        int hits = calculateHits(attacker, defender);
-        System.out.println(hits + " hit(s)!");
-        for (int i = 0; i < hits; i++) {
-            boolean wound = rollToWound(attacker, defender);
-            if (!wound) {
-                System.out.println("no wound!");
-                continue;
-            }
-            System.out.println("wounded!");
-            boolean armorSave = rollForArmorSave(defender, attacker);
-            if (armorSave) {
-                System.out.println("armour saved!");
-                continue;
-            }
-            System.out.println("armour save failed!");
-            boolean specialSave = rollForSpecialSave(defender);
-            if (specialSave) {
-                System.out.println("special saved!");
-                continue;
-            }
-            System.out.println("special save failed!");
-            // 7 & 8. Defender suffers unsaved wounds and loses Health Points
-//                        defender.defensiveProfile.reduceHealthPoints(1); // Reduce health by 1 for each unsaved wound
-            if (defender.getHealthPoints() <= 0) {
-                System.out.println("defender dead!");
-                removeCasualty(defender);
-            } else {
-                System.out.println("defender alive!");
+    public int performAttack(int noAttackers, Model attacker, Model defender) {
+        int hits = rollToHit(noAttackers, attacker, defender);
+        int wounds = rollToWound(hits, attacker, defender);
+        int notArmorSaved = rollForArmorSave(wounds, attacker, defender);
+        return rollForSpecialSave(notArmorSaved, attacker, defender);
+    }
+
+    private int rollToWound(int noHits, Model attacker, Model defender) {
+        int neededRoll = determineNeededRoll(attacker.getStrength(), defender.getResilience());
+        int wounds = 0;
+        List<Integer> rolls = new ArrayList<>();
+        for (int i = 0; i < noHits; i++) {
+            int roll = new Random().nextInt(6) + 1;
+            rolls.add(roll);
+            if ((roll >= neededRoll && roll != 1) || roll == 6) {
+                wounds++;
             }
         }
+        String collect = rolls.stream().sorted().map(String::valueOf)
+                .collect(Collectors.joining(","));
+        System.out.println("to wound rolls:\n" + collect + "\n" + wounds + " wound(s)!\n");
+        return wounds;
     }
 
-    private boolean rollToWound(Model attacker, Model defender) {
-        int neededRoll = determineNeededRoll(attacker.getStrength(), defender.getResilience());
-        int roll = new Random().nextInt(6) + 1;
-        System.out.println("rolled " + roll + " to wound!");
-        return roll >= neededRoll;
-    }
-
-    private boolean rollForArmorSave(Model defender, Model attacker) {
+    private int rollForArmorSave(int savesToMake, Model defender, Model attacker) {
         int neededRoll = 7 - defender.getArmor() + attacker.getArmorPenetration();
         if (neededRoll > 6) {
-            System.out.println("no armor save available!");
-            return false;
+            return savesToMake;
         }
-        int roll = new Random().nextInt(6) + 1;
-        System.out.println("rolled " + roll + " to armor save!");
-        return roll >= neededRoll;
+        int savesMade = 0;
+        List<Integer> rolls = new ArrayList<>();
+        for (int i = 0; i < savesToMake; i++) {
+            int roll = new Random().nextInt(6) + 1;
+            rolls.add(roll);
+            if (roll >= neededRoll && roll != 1) {
+                savesMade++;
+            }
+        }
+        String collect = rolls.stream().sorted().map(String::valueOf)
+                .collect(Collectors.joining(","));
+        System.out.println("armor save rolls:\n" + collect + "\n" + savesMade + " armor save(s) made!\n");
+        return savesToMake - savesMade;
     }
 
-    private boolean rollForSpecialSave(Model defender) {
+    private int rollForSpecialSave(int savesToMake, Model attacker, Model defender) {
         int neededRoll = defender.getSpecialSave();
         if (neededRoll > 6) {
-            System.out.println("no special save available!");
-            return false;
+            return savesToMake;
         }
-        int roll = new Random().nextInt(6) + 1;
-        System.out.println("rolled " + roll + " to special save!");
-        return roll >= neededRoll;
+        int savesMade = 0;
+        List<Integer> rolls = new ArrayList<>();
+        for (int i = 0; i < savesToMake; i++) {
+            int roll = new Random().nextInt(6) + 1;
+            rolls.add(roll);
+            if (roll >= neededRoll && roll != 1) {
+                savesMade++;
+            }
+        }
+        String collect = rolls.stream().sorted().map(String::valueOf)
+                .collect(Collectors.joining(","));
+        System.out.println("special save rolls:\n" + collect + "\n" + savesMade + " special save(s) made!\n");
+        return savesToMake - savesMade;
+    }
+
+    private int rollToHit(int noAttackers, Model attacker, Model defender) {
+        int toHitDifference = attacker.getOffensiveSkill() - defender.getDefensiveSkill();
+
+        attacker.getAttackAttributes()
+                .forEach(attackAttribute
+                        -> attackAttribute.onAttackEvent(AttackEvent.TO_HIT_MODIFIER, attacker, defender));
+        int toHitModifier = attacker.getToHitModifier();
+        int neededRoll = determineNeededToHitRoll(toHitDifference) - toHitModifier;
+
+        List<Integer> rolls = new ArrayList<>();
+        int hits = 0;
+        for (int i = 0; i < attacker.getAttacks() * noAttackers; i++) {
+            int roll = new Random().nextInt(6) + 1;
+            rolls.add(roll);
+            if ((roll >= neededRoll && roll != 1) || roll == 6) {
+                hits++;
+            }
+        }
+        String collect = rolls.stream().sorted().map(String::valueOf)
+                .collect(Collectors.joining(","));
+        System.out.println("to hit rolls:\n" + collect + "\n" + hits + " hit(s)!\n");
+        return hits;
     }
 
     private int determineNeededRoll(int attackStrength, int defenderResilience) {
@@ -78,38 +107,12 @@ public class Game {
         return 6; // difference <= -2
     }
 
-    private int calculateHits(Model attacker, Model defender) {
-        int hits = 0;
-        Random random = new Random();
-        int toHitDifference = attacker.getOffensiveSkill() - defender.getDefensiveSkill();
-
-        attacker.getAttackAttributes()
-                .forEach(attackAttribute
-                -> attackAttribute.onAttackEvent(AttackEvent.TO_HIT_MODIFIER, attacker, defender));
-        int toHitModifier = attacker.getToHitModifier();
-        int neededRoll = determineNeededToHitRoll(toHitDifference) - toHitModifier;
-
-        for (int i = 0; i < attacker.getAttacks(); i++) {
-            int roll = random.nextInt(6) + 1;
-            System.out.println("rolled " + roll + " to hit!");
-            if ((roll >= neededRoll && roll != 1) || roll == 6) {
-                hits++;
-            }
-        }
-
-        return hits;
-    }
-
     private int determineNeededToHitRoll(int toHitDifference) {
         if (toHitDifference >= 4) return 2;
         if (toHitDifference >= 1) return 3;
         if (toHitDifference >= -3) return 4;
         if (toHitDifference >= -7) return 5;
         return 6; // toHitDifference < -7
-    }
-
-    private void removeCasualty(Model defender) {
-        // Remove model from the game (not implemented here)
     }
 }
 
