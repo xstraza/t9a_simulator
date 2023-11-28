@@ -1,5 +1,8 @@
 package gpt;
 
+import gpt.attack_attribute.AttackEvent;
+import gpt.model.Model;
+
 import java.util.Random;
 
 public class Game {
@@ -80,7 +83,11 @@ public class Game {
         Random random = new Random();
         int toHitDifference = attacker.getOffensiveSkill() - defender.getDefensiveSkill();
 
-        int neededRoll = determineNeededToHitRoll(toHitDifference);
+        attacker.getAttackAttributes()
+                .forEach(attackAttribute
+                -> attackAttribute.onAttackEvent(AttackEvent.TO_HIT_MODIFIER, attacker, defender));
+        int toHitModifier = attacker.getToHitModifier();
+        int neededRoll = determineNeededToHitRoll(toHitDifference) - toHitModifier;
 
         for (int i = 0; i < attacker.getAttacks(); i++) {
             int roll = random.nextInt(6) + 1;
