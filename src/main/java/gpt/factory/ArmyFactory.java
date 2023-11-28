@@ -1,6 +1,8 @@
 package gpt.factory;
 
-public class ModelFactory {
+import gpt.factory.army.HighElfFactory;
+
+public class ArmyFactory {
 
     public HighElfFactory createHighElfFactory() {
         return new HighElfFactory();
