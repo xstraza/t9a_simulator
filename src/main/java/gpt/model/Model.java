@@ -1,5 +1,11 @@
-package gpt;
+package gpt.model;
 
+
+import gpt.Armor;
+import gpt.Weapon;
+import gpt.attack_attribute.AttackAttribute;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -8,12 +14,18 @@ public class Model {
     DefensiveProfile defensiveProfile;
     List<Armor> armor;
     Weapon weapon;
+    @Getter List<AttackAttribute> attackAttributes;
 
-    public Model(OffensiveProfile offensiveProfile, DefensiveProfile defensiveProfile, List<Armor> armor, Weapon weapon) {
+
+    @Getter @Setter
+    int toHitModifier = 0;
+
+    protected Model(OffensiveProfile offensiveProfile, DefensiveProfile defensiveProfile, List<Armor> armor, Weapon weapon, List<AttackAttribute> attackAttributes) {
         this.offensiveProfile = offensiveProfile;
         this.defensiveProfile = defensiveProfile;
         this.armor = armor;
         this.weapon = weapon;
+        this.attackAttributes = attackAttributes;
     }
 
     public int getSpecialSave() {

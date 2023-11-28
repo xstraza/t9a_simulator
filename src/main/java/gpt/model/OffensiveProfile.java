@@ -1,4 +1,4 @@
-package gpt;
+package gpt.model;
 
 public record OffensiveProfile(int attacks,
                                int offensiveSkill,

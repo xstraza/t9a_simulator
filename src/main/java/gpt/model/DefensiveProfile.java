@@ -1,4 +1,4 @@
-package gpt;
+package gpt.model;
 
 public record DefensiveProfile(int hp,
                                int defensiveSkill,
