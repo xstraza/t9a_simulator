@@ -1,13 +1,14 @@
 package gpt;
 
-import gpt.factory.ModelFactory;
+import gpt.model.Model;
+import gpt.factory.ArmyFactory;
 
 public class Main {
 
     public static void main(String[] args) {
-        ModelFactory modelFactory = new ModelFactory();
-        Model spearman = modelFactory.createHighElfFactory().createSpearman();
-        Model archer = modelFactory.createHighElfFactory().createArcher();
+        ArmyFactory armyFactory = new ArmyFactory();
+        Model spearman = armyFactory.createHighElfFactory().createSpearman();
+        Model archer = armyFactory.createHighElfFactory().createArcher();
         Game game = new Game();
         for (int i = 0; i < 10; i++) {
             game.performAttack(spearman, archer);
