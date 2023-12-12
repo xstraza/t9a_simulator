@@ -1,7 +1,7 @@
 package gpt.factory.army;
 
-import gpt.attack_attribute.FightInExtraRank;
-import gpt.attack_attribute.LightningReflexes;
+import gpt.attackAttribute.FightInExtraRank;
+import gpt.attackAttribute.LightningReflexes;
 import gpt.factory.ArmorFactory;
 import gpt.factory.WeaponFactory;
 import gpt.model.DefensiveProfile;

@@ -1,6 +1,6 @@
 package gpt;
 
-import gpt.attack_attribute.AttackAttribute;
+import gpt.attackAttribute.AttackAttribute;
 import lombok.Getter;
 
 import java.util.ArrayList;

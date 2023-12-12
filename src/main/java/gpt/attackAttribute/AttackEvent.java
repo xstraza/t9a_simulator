@@ -1,4 +1,4 @@
-package gpt.attack_attribute;
+package gpt.attackAttribute;
 
 public enum AttackEvent {
     TO_HIT_MODIFIER,

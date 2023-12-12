@@ -1,7 +1,7 @@
 package gpt.factory;
 
 import gpt.Weapon;
-import gpt.attack_attribute.FightInExtraRank;
+import gpt.attackAttribute.FightInExtraRank;
 
 public class WeaponFactory {
 

@@ -3,7 +3,7 @@ package gpt.model;
 
 import gpt.Armor;
 import gpt.Weapon;
-import gpt.attack_attribute.AttackAttribute;
+import gpt.attackAttribute.AttackAttribute;
 import lombok.Getter;
 import lombok.Setter;
 

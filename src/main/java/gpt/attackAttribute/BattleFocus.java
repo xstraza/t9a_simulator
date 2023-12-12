@@ -1,4 +1,4 @@
-package gpt.attack_attribute;
+package gpt.attackAttribute;
 
 import gpt.model.Model;
 

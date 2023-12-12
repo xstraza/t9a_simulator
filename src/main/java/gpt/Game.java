@@ -1,6 +1,6 @@
 package gpt;
 
-import gpt.attack_attribute.AttackEvent;
+import gpt.attackAttribute.AttackEvent;
 import gpt.model.Model;
 import gpt.model.Unit;
 

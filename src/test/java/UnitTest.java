@@ -1,5 +1,5 @@
 import gpt.Game;
-import gpt.attack_attribute.AttackEvent;
+import gpt.attackAttribute.AttackEvent;
 import gpt.factory.ArmyFactory;
 import gpt.model.Model;
 import gpt.model.Unit;
