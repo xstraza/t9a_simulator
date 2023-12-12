@@ -133,7 +133,7 @@ public class Game {
         return 6; // toHitDifference < -7
     }
 
-    private void triggerAttackAttribute(Supplier<AttackEvent> eventSupplier, Model attacker, Model defender) {
+    public void triggerAttackAttribute(Supplier<AttackEvent> eventSupplier, Model attacker, Model defender) {
         AttackEvent event = eventSupplier.get();
         attacker.getAttackAttributes()
                 .forEach(attribute ->
@@ -154,23 +154,25 @@ public class Game {
     public int getTotalAttacks(Unit unit) {
         int totalAttacks = 0;
 
-        // Calculate attacks for the first rank if enough models are alive.
         if (unit.getNumberOfModels() >= unit.getFrontage()) {
-            totalAttacks += unit.getFrontage() * unit.getModel().getAttacks(); // All models in the first rank get model.attacks() attacks.
+            totalAttacks += unit.getFrontage() * unit.getModel().getAttacks();
         } else if (unit.getNumberOfModels() > 0) {
-            totalAttacks += unit.getNumberOfModels() * unit.getModel().getAttacks(); // If not enough for a full rank, use available models.
+            return unit.getNumberOfModels() * unit.getModel().getAttacks();
         }
 
-        // Calculate attacks for the second rank if there are enough models.
-        if (unit.getNumberOfModels() > unit.getFrontage()) {
-            int remainingModels = unit.getNumberOfModels() - unit.getFrontage();
-            totalAttacks += Math.min(remainingModels, unit.getFrontage()); // All models in the second rank get 1 attack.
+        int supportingRanks = 1;
+        if (unit.isLineFormation()) {
+            supportingRanks++;
         }
-
-        // Calculate attacks for the third rank in line formation if there are enough models.
-        if (unit.isLineFormation() && unit.getNumberOfModels() > (2 * unit.getFrontage())) {
-            int remainingModels = unit.getNumberOfModels() - (2 * unit.getFrontage());
-            totalAttacks += Math.min(remainingModels, unit.getFrontage()); // All models in the third rank get 1 attack.
+        supportingRanks += unit.getModel().getFightInExtraRanks();
+        int modelsLeft = unit.getNumberOfModels() - unit.getFrontage();
+        while (supportingRanks > 0) {
+            supportingRanks--;
+            totalAttacks += modelsLeft > unit.getFrontage() ? unit.getFrontage() : modelsLeft;
+            modelsLeft -= unit.getFrontage();
+            if (modelsLeft <= 0) {
+                break;
+            }
         }
 
         return totalAttacks;

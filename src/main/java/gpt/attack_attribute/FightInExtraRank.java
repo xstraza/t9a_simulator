@@ -8,6 +8,6 @@ public class FightInExtraRank implements AttackAttribute {
         if (event != AttackEvent.DETERMINE_ATTACKS) {
             return;
         }
-
+        attacker.setFightInExtraRanks(attacker.getFightInExtraRanks() + 1);
     }
 }

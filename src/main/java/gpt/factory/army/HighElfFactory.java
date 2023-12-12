@@ -1,5 +1,6 @@
 package gpt.factory.army;
 
+import gpt.attack_attribute.FightInExtraRank;
 import gpt.attack_attribute.LightningReflexes;
 import gpt.factory.ArmorFactory;
 import gpt.factory.WeaponFactory;
@@ -18,7 +19,20 @@ public class HighElfFactory {
                 .setDefensiveProfile(baseElfDefensiveProfile)
                 .setWeapon(WeaponFactory.aHandWeapon())
                 .addArmor(ArmorFactory.lightArmor())
-                .addAttackAttribute(new LightningReflexes());
+                .addAttackAttribute(new LightningReflexes())
+                .addAttackAttribute(new FightInExtraRank());
+    }
+
+    public Model createSeaGuard() {
+        return new ModelBuilder()
+                .setName("Sea Guard")
+                .setOffensiveProfile(baseElfOffensiveProfile)
+                .setDefensiveProfile(new DefensiveProfile(1, 5, 3, 0))
+                .setWeapon(WeaponFactory.aSpear())
+                .addArmor(ArmorFactory.shield())
+                .addArmor(ArmorFactory.lightArmor())
+                .addAttackAttribute(new LightningReflexes())
+                .build();
     }
 
     public Model createSpearman() {

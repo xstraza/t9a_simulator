@@ -18,7 +18,6 @@ public class Model {
     Weapon weapon;
     List<AttackAttribute> attackAttributes;
 
-
     @Getter @Setter
     int toHitModifier = 0;
 
@@ -44,13 +43,7 @@ public class Model {
     }
 
     public int getSpecialSave() {
-        //todo;
         return 10;
-    }
-
-    public int getHealthPoints() {
-        //todo
-        return defensiveProfile.hp();
     }
 
     public int getResilience() {
