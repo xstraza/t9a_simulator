@@ -10,19 +10,16 @@ import java.util.List;
 
 public class ModelBuilder {
     private String name;
-    private OffensiveProfile offensiveProfile;
+    private final List<OffensiveProfile> offensiveProfiles = new ArrayList<>();
     private DefensiveProfile defensiveProfile;
-    private final List<Armor> armor = new ArrayList<>();
-    private Weapon weapon;
-    private final List<AttackAttribute> attackAttributes = new ArrayList<>();
 
     public ModelBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
-    public ModelBuilder setOffensiveProfile(OffensiveProfile offensiveProfile) {
-        this.offensiveProfile = offensiveProfile;
+    public ModelBuilder addOffensiveProfile(OffensiveProfile offensiveProfile) {
+        this.offensiveProfiles.add(offensiveProfile);
         return this;
     }
 
@@ -31,23 +28,8 @@ public class ModelBuilder {
         return this;
     }
 
-    public ModelBuilder addArmor(Armor armorPiece) {
-        this.armor.add(armorPiece);
-        return this;
-    }
-
-    public ModelBuilder setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-        return this;
-    }
-
-    public ModelBuilder addAttackAttribute(AttackAttribute attribute) {
-        this.attackAttributes.add(attribute);
-        return this;
-    }
-
     public Model build() {
-        return new Model(name, offensiveProfile, defensiveProfile, armor, weapon, attackAttributes);
+        return new Model(name, offensiveProfiles, defensiveProfile);
     }
 
 

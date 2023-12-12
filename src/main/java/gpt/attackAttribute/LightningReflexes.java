@@ -1,14 +1,15 @@
 package gpt.attackAttribute;
 
+import gpt.Attack;
 import gpt.model.Model;
 
 public class LightningReflexes implements AttackAttribute {
 
     @Override
-    public void onAttackEvent(AttackEvent event, Model attacker, Model defender) {
+    public void onAttackEvent(AttackEvent event, Attack attack, Model defender) {
         if (event != AttackEvent.TO_HIT_MODIFIER) {
             return;
         }
-        attacker.setToHitModifier(attacker.getToHitModifier() + 1);
+        attack.setToHitModifier(attack.getToHitModifier() + 1);
     }
 }

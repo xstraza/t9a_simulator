@@ -1,13 +1,15 @@
 package gpt.attackAttribute;
 
+import gpt.Attack;
 import gpt.model.Model;
 
 public class FightInExtraRank implements AttackAttribute {
+
     @Override
-    public void onAttackEvent(AttackEvent event, Model attacker, Model defender) {
+    public void onAttackEvent(AttackEvent event, Attack attack, Model defender) {
         if (event != AttackEvent.DETERMINE_ATTACKS) {
             return;
         }
-        attacker.setFightInExtraRanks(attacker.getFightInExtraRanks() + 1);
+        attack.setFier(attack.getFier()+1);
     }
 }

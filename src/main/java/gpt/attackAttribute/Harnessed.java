@@ -3,12 +3,13 @@ package gpt.attackAttribute;
 import gpt.Attack;
 import gpt.model.Model;
 
-public class BattleFocus implements AttackAttribute {
+public class Harnessed implements AttackAttribute {
+
     @Override
     public void onAttackEvent(AttackEvent event, Attack attack, Model defender) {
-        if (event != AttackEvent.ROLLED_6_TO_HIT) {
+        if (event != AttackEvent.DETERMINE_ATTACKS) {
             return;
         }
-        attack.setHits(2);
+        attack.setRank(attack.getRank() == 1 ? 1 : 100);
     }
 }

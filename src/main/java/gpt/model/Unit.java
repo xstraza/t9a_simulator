@@ -3,6 +3,8 @@ package gpt.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 public class Unit {
     @Getter
     private int numberOfModels;
@@ -42,6 +44,15 @@ public class Unit {
             return 0;
         }
         return Math.min(getFullRanksAfterFirst(), 3);
+    }
+
+    public Optional<Model> getModelAtPosition(int rank, int file) {
+        int totalModels = frontage * (rank - 1) + file;
+        if (totalModels <= numberOfModels) {
+            return Optional.of(model);
+        } else {
+            return Optional.empty();
+        }
     }
 
 }

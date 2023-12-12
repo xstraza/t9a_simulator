@@ -2,44 +2,27 @@ package gpt.model;
 
 
 import gpt.Armor;
+import gpt.Attack;
 import gpt.Weapon;
 import gpt.attackAttribute.AttackAttribute;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Model {
     String name;
-    OffensiveProfile offensiveProfile;
+    List<OffensiveProfile> offensiveProfiles;
     DefensiveProfile defensiveProfile;
-    List<Armor> armor;
-    Weapon weapon;
-    List<AttackAttribute> attackAttributes;
 
-    @Getter @Setter
-    int toHitModifier = 0;
-
-    @Getter @Setter
-    int hits = 1;
-
-    @Getter @Setter
-    int fightInExtraRanks;
-
-    public List<AttackAttribute> getAttackAttributes() {
-        List<AttackAttribute> attributes = new ArrayList<>(attackAttributes);
-        attributes.addAll(weapon.getAttackAttributes());
-        return attributes;
-    }
-
-    protected Model(String name, OffensiveProfile offensiveProfile, DefensiveProfile defensiveProfile, List<Armor> armor, Weapon weapon, List<AttackAttribute> attackAttributes) {
+    protected Model(String name, List<OffensiveProfile> offensiveProfiles, DefensiveProfile defensiveProfile) {
         this.name = name;
-        this.offensiveProfile = offensiveProfile;
+        this.offensiveProfiles = offensiveProfiles;
         this.defensiveProfile = defensiveProfile;
-        this.armor = armor;
-        this.weapon = weapon;
-        this.attackAttributes = attackAttributes;
     }
 
     public int getSpecialSave() {
@@ -51,32 +34,27 @@ public class Model {
     }
 
     public int getArmor() {
-        return defensiveProfile.armour() + armor.stream().mapToInt(Armor::getArmorValue).sum();
+        return defensiveProfile.armour() + defensiveProfile.armors().stream().mapToInt(Armor::getArmorValue).sum();
     }
 
-    public int getOffensiveSkill() {
-        return offensiveProfile.offensiveSkill();
+    @Override
+    public String toString() {
+        return name;
     }
 
     public int getDefensiveSkill() {
         return defensiveProfile.defensiveSkill();
     }
 
-    public int getStrength() {
-        return offensiveProfile.strength();
-    }
-
-    public int getAttacks() {
-        return offensiveProfile.attacks();
-    }
-
-    public int getArmorPenetration() {
-        return offensiveProfile.armourPenetration() + weapon.getArmorPenetration();
-    }
-
-    @Override
-    public String toString() {
-        return name;
+    public List<Attack> getAttacks(int rank, int fier) {
+        List<Attack> attacks = new ArrayList<>();
+        for (OffensiveProfile offensiveProfile : offensiveProfiles) {
+            for (int i = 0; i < offensiveProfile.attacks(); i++) {
+                Attack attack = new Attack(offensiveProfile, rank, fier);
+                attacks.add(attack);
+            }
+        }
+        return attacks;
     }
 }
 
