@@ -2,13 +2,21 @@ package gpt;
 
 import gpt.attack_attribute.AttackEvent;
 import gpt.model.Model;
+import gpt.model.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Game {
+
+    public void attackUnit(Unit attackers, Unit defenders) {
+        int numberOfModels = attackers.getNumberOfModels();
+        int wounds = performAttack(numberOfModels, attackers.getModel(), defenders.getModel());
+        defenders.reduceModels(wounds);
+    }
 
     public int performAttack(int noAttackers, Model attacker, Model defender) {
         int hits = rollToHit(noAttackers, attacker, defender);
@@ -77,9 +85,7 @@ public class Game {
     private int rollToHit(int noAttackers, Model attacker, Model defender) {
         int toHitDifference = attacker.getOffensiveSkill() - defender.getDefensiveSkill();
 
-        attacker.getAttackAttributes()
-                .forEach(attackAttribute
-                        -> attackAttribute.onAttackEvent(AttackEvent.TO_HIT_MODIFIER, attacker, defender));
+        triggerAttackAttribute(() -> AttackEvent.TO_HIT_MODIFIER, attacker, defender);
         int toHitModifier = attacker.getToHitModifier();
         int neededRoll = determineNeededToHitRoll(toHitDifference) - toHitModifier;
 
@@ -87,9 +93,10 @@ public class Game {
         int hits = 0;
         for (int i = 0; i < attacker.getAttacks() * noAttackers; i++) {
             int roll = new Random().nextInt(6) + 1;
+            triggerAttackAttribute(() -> getEventForToHitRoll(roll), attacker, defender);
             rolls.add(roll);
             if ((roll >= neededRoll && roll != 1) || roll == 6) {
-                hits++;
+                hits += attacker.getHits();
             }
         }
         String collect = rolls.stream().sorted().map(String::valueOf)
@@ -113,6 +120,24 @@ public class Game {
         if (toHitDifference >= -3) return 4;
         if (toHitDifference >= -7) return 5;
         return 6; // toHitDifference < -7
+    }
+
+    private void triggerAttackAttribute(Supplier<AttackEvent> eventSupplier, Model attacker, Model defender) {
+        AttackEvent event = eventSupplier.get();
+        attacker.getAttackAttributes()
+                .forEach(attribute ->
+                        attribute.onAttackEvent(event, attacker, defender));
+    }
+
+    private AttackEvent getEventForToHitRoll(int roll) {
+        return switch (roll) {
+            case 1 -> AttackEvent.ROLLED_1_TO_HIT;
+            case 2 -> AttackEvent.ROLLED_2_TO_HIT;
+            case 3 -> AttackEvent.ROLLED_3_TO_HIT;
+            case 4 -> AttackEvent.ROLLED_4_TO_HIT;
+            case 5 -> AttackEvent.ROLLED_5_TO_HIT;
+            default -> AttackEvent.ROLLED_6_TO_HIT;
+        };
     }
 }
 

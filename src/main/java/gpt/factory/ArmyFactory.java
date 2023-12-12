@@ -4,7 +4,7 @@ import gpt.factory.army.HighElfFactory;
 
 public class ArmyFactory {
 
-    public HighElfFactory createHighElfFactory() {
+    public HighElfFactory HighbornElves() {
         return new HighElfFactory();
     }
 

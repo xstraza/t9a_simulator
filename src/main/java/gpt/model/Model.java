@@ -20,6 +20,9 @@ public class Model {
     @Getter @Setter
     int toHitModifier = 0;
 
+    @Getter @Setter
+    int hits = 1;
+
     protected Model(OffensiveProfile offensiveProfile, DefensiveProfile defensiveProfile, List<Armor> armor, Weapon weapon, List<AttackAttribute> attackAttributes) {
         this.offensiveProfile = offensiveProfile;
         this.defensiveProfile = defensiveProfile;
