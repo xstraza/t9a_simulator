@@ -12,9 +12,18 @@ import java.util.stream.Collectors;
 
 public class Game {
 
+    public void fightARoundOfCombat(Unit unit1, Unit unit2) {
+        System.out.println(unit1.getModel() + " attacking");
+        attackUnit(unit1, unit2);
+        System.out.println(unit2.getModel() + " attacking");
+        attackUnit(unit2, unit1);
+    }
+
     public void attackUnit(Unit attackers, Unit defenders) {
-        int numberOfModels = attackers.getNumberOfModels();
-        int wounds = performAttack(numberOfModels, attackers.getModel(), defenders.getModel());
+        triggerAttackAttribute(() -> AttackEvent.DETERMINE_ATTACKS, attackers.getModel(), defenders.getModel());
+        int noAttacks = getTotalAttacks(attackers);
+        System.out.println(attackers.getModel() + " unit has " + noAttacks + " attacks");
+        int wounds = performAttack(noAttacks, attackers.getModel(), defenders.getModel());
         defenders.reduceModels(wounds);
     }
 
@@ -42,8 +51,10 @@ public class Game {
         return wounds;
     }
 
-    private int rollForArmorSave(int savesToMake, Model defender, Model attacker) {
-        int neededRoll = 7 - defender.getArmor() + attacker.getArmorPenetration();
+    private int rollForArmorSave(int savesToMake, Model attacker, Model defender) {
+        int armor = defender.getArmor();
+        int armorPenetration = attacker.getArmorPenetration();
+        int neededRoll = 7 - armor + armorPenetration;
         if (neededRoll > 6) {
             return savesToMake;
         }
@@ -138,6 +149,31 @@ public class Game {
             case 5 -> AttackEvent.ROLLED_5_TO_HIT;
             default -> AttackEvent.ROLLED_6_TO_HIT;
         };
+    }
+
+    public int getTotalAttacks(Unit unit) {
+        int totalAttacks = 0;
+
+        // Calculate attacks for the first rank if enough models are alive.
+        if (unit.getNumberOfModels() >= unit.getFrontage()) {
+            totalAttacks += unit.getFrontage() * unit.getModel().getAttacks(); // All models in the first rank get model.attacks() attacks.
+        } else if (unit.getNumberOfModels() > 0) {
+            totalAttacks += unit.getNumberOfModels() * unit.getModel().getAttacks(); // If not enough for a full rank, use available models.
+        }
+
+        // Calculate attacks for the second rank if there are enough models.
+        if (unit.getNumberOfModels() > unit.getFrontage()) {
+            int remainingModels = unit.getNumberOfModels() - unit.getFrontage();
+            totalAttacks += Math.min(remainingModels, unit.getFrontage()); // All models in the second rank get 1 attack.
+        }
+
+        // Calculate attacks for the third rank in line formation if there are enough models.
+        if (unit.isLineFormation() && unit.getNumberOfModels() > (2 * unit.getFrontage())) {
+            int remainingModels = unit.getNumberOfModels() - (2 * unit.getFrontage());
+            totalAttacks += Math.min(remainingModels, unit.getFrontage()); // All models in the third rank get 1 attack.
+        }
+
+        return totalAttacks;
     }
 }
 

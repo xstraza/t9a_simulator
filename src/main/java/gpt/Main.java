@@ -6,14 +6,11 @@ import gpt.model.Unit;
 public class Main {
 
     public static void main(String[] args) {
-        ArmyFactory armyFactory = new ArmyFactory();
-        // Create units of spearmen and archers
-        Unit spearmenUnit = new Unit(15, armyFactory.HighbornElves().createSpearman());
-        Unit archerUnit = new Unit(10, armyFactory.HighbornElves().createArcher());
+        Unit spearmenUnit = new Unit(15, new ArmyFactory().HighbornElves().createSpearman(), 5);
+        Unit archerUnit = new Unit(10, new ArmyFactory().HighbornElves().createArcher(), 5);
 
         Game game = new Game();
-        game.attackUnit(spearmenUnit, archerUnit);
-        game.attackUnit(archerUnit, spearmenUnit);
+        game.fightARoundOfCombat(spearmenUnit, archerUnit);
 
         System.out.println("Remaining spearmen: " + spearmenUnit.getNumberOfModels());
         System.out.println("Remaining archers: " + archerUnit.getNumberOfModels());

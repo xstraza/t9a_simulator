@@ -9,11 +9,17 @@ import java.util.List;
 
 
 public class ModelBuilder {
+    private String name;
     private OffensiveProfile offensiveProfile;
     private DefensiveProfile defensiveProfile;
     private final List<Armor> armor = new ArrayList<>();
     private Weapon weapon;
     private final List<AttackAttribute> attackAttributes = new ArrayList<>();
+
+    public ModelBuilder setName(String name) {
+        this.name = name;
+        return this;
+    }
 
     public ModelBuilder setOffensiveProfile(OffensiveProfile offensiveProfile) {
         this.offensiveProfile = offensiveProfile;
@@ -41,7 +47,7 @@ public class ModelBuilder {
     }
 
     public Model build() {
-        return new Model(offensiveProfile, defensiveProfile, armor, weapon, attackAttributes);
+        return new Model(name, offensiveProfile, defensiveProfile, armor, weapon, attackAttributes);
     }
 
 

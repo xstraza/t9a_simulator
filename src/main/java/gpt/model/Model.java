@@ -7,14 +7,16 @@ import gpt.attack_attribute.AttackAttribute;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
+    String name;
     OffensiveProfile offensiveProfile;
     DefensiveProfile defensiveProfile;
     List<Armor> armor;
     Weapon weapon;
-    @Getter List<AttackAttribute> attackAttributes;
+    List<AttackAttribute> attackAttributes;
 
 
     @Getter @Setter
@@ -23,7 +25,17 @@ public class Model {
     @Getter @Setter
     int hits = 1;
 
-    protected Model(OffensiveProfile offensiveProfile, DefensiveProfile defensiveProfile, List<Armor> armor, Weapon weapon, List<AttackAttribute> attackAttributes) {
+    @Getter @Setter
+    int fightInExtraRanks;
+
+    public List<AttackAttribute> getAttackAttributes() {
+        List<AttackAttribute> attributes = new ArrayList<>(attackAttributes);
+        attributes.addAll(weapon.getAttackAttributes());
+        return attributes;
+    }
+
+    protected Model(String name, OffensiveProfile offensiveProfile, DefensiveProfile defensiveProfile, List<Armor> armor, Weapon weapon, List<AttackAttribute> attackAttributes) {
+        this.name = name;
         this.offensiveProfile = offensiveProfile;
         this.defensiveProfile = defensiveProfile;
         this.armor = armor;
@@ -46,7 +58,7 @@ public class Model {
     }
 
     public int getArmor() {
-        return defensiveProfile.armour();
+        return defensiveProfile.armour() + armor.stream().mapToInt(Armor::getArmorValue).sum();
     }
 
     public int getOffensiveSkill() {
@@ -66,7 +78,12 @@ public class Model {
     }
 
     public int getArmorPenetration() {
-        return offensiveProfile.armourPenetration();
+        return offensiveProfile.armourPenetration() + weapon.getArmorPenetration();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
 

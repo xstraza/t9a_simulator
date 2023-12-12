@@ -23,6 +23,7 @@ public class HighElfFactory {
 
     public Model createSpearman() {
         return aBasicElf()
+                .setName("Spearman")
                 .setWeapon(WeaponFactory.aSpear())
                 .addArmor(ArmorFactory.shield())
                 .build();
@@ -30,6 +31,7 @@ public class HighElfFactory {
 
     public Model createArcher() {
         return aBasicElf()
+                .setName("Archer")
                 .build();
     }
 
