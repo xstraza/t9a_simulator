@@ -1,6 +1,6 @@
-import gpt.attack.Attack;
+import gpt.specialRules.Attack;
 import gpt.Game;
-import gpt.attack.AttackEvent;
+import gpt.specialRules.Event;
 import gpt.model.Unit;
 import gpt.model.factory.HighElfFactory;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ public class HarnessedTest {
 
     private void testHarnessed(int size, int frontage, int expected) {
         List<Attack> attacks = Game.getTotalAttacks(getLancerUnit(size, frontage));
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> AttackEvent.DETERMINE_ATTACKS, attack, null));
+        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.DETERMINE_ATTACKS, attack, null));
         attacks = Game.removeInvalidAttacks(attacks);
         assertEquals(expected, attacks.size());
     }

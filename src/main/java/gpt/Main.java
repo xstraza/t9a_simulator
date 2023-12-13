@@ -11,10 +11,10 @@ public class Main {
         double sumRemainingUnit1 = 0;
         double sumRemainingUnit2 = 0;
         Model model1 = swordmaster();
-        Model model2 = lionguard();
+        Model model2 = flamewarden();
         for (int i = 0; i < count; i++) {
             Unit unit1 = new Unit(10, model1, 5, true);
-            Unit unit2 = new Unit(10, model2, 5, false);
+            Unit unit2 = new Unit(15, model2, 5, false);
             Game game = new Game();
             game.fightARoundOfCombat(unit1, unit2);
 
@@ -40,6 +40,10 @@ public class Main {
 
     private static Model swordmaster() {
         return HighElfFactory.createSwordMaster();
+    }
+
+    private static Model flamewarden() {
+        return HighElfFactory.createFlameWarden();
     }
 
     private static Model lionguard() {

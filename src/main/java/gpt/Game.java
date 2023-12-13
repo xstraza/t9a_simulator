@@ -1,7 +1,7 @@
 package gpt;
 
-import gpt.attack.Attack;
-import gpt.attack.AttackEvent;
+import gpt.specialRules.Attack;
+import gpt.specialRules.Event;
 import gpt.model.Model;
 import gpt.model.Unit;
 
@@ -25,19 +25,19 @@ public class Game {
 
     public static int attackUnit(Unit attackers, Unit defenders, int agility) {
         List<Attack> attacks = getTotalAttacks(attackers);
-        attacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.AGILITY_MODIFIER, attack, defenders.getModel()));
-        attacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.CHARGE, attack, defenders.getModel()));
+        attacks.forEach(attack -> triggerAttackAttribute(() -> Event.AGILITY_MODIFIER, attack, defenders.getModel()));
+        attacks.forEach(attack -> triggerAttackAttribute(() -> Event.CHARGE, attack, defenders.getModel()));
         List<Attack> attacksForAgility = attacks.stream()
                 .filter(a -> a.getAgility() == agility)
                 .collect(Collectors.toList());
-        attacksForAgility.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.DETERMINE_ATTACKS, attack, defenders.getModel()));
+        attacksForAgility.forEach(attack -> triggerAttackAttribute(() -> Event.DETERMINE_ATTACKS, attack, defenders.getModel()));
         List<Attack> validAttacks = removeInvalidAttacks(attacksForAgility);
         if (validAttacks.isEmpty()) {
             return 0;
         }
         System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + agility);
         List<Attack> successfulAttacks = performAttacks(validAttacks, defenders.getModel());
-        successfulAttacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.APPLY_MULTIPLE_WOUNDS, attack, defenders.getModel()));
+        successfulAttacks.forEach(attack -> triggerAttackAttribute(() -> Event.APPLY_MULTIPLE_WOUNDS, attack, defenders.getModel()));
         return successfulAttacks.stream()
                 .mapToInt(Attack::getWoundsCaused)
                 .sum();
@@ -62,7 +62,7 @@ public class Game {
         int hits = 0;
         for (Attack attack : attacks) {
             int toHitDifference = attack.getOffensiveSkill() - defender.getDefensiveSkill();
-            triggerAttackAttribute(() -> AttackEvent.TO_HIT_MODIFIER, attack, defender);
+            triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, defender);
             int toHitModifier = attack.getToHitModifier();
             int neededRoll = determineNeededToHitRoll(toHitDifference) - toHitModifier;
 
@@ -133,6 +133,7 @@ public class Game {
     private static List<Attack> rollForSpecialSave(List<Attack> attacks, Model defender) {
         List<Attack> attacksNotSpecialSaved = new ArrayList<>();
         List<Integer> rolls = new ArrayList<>();
+        triggerPersonalProtection(() -> Event.SPECIAL_SAVE, attacks, defender);
         int neededRoll = defender.getSpecialSave();
         if (neededRoll > 6) {
             return attacks;
@@ -173,21 +174,28 @@ public class Game {
         return 6; // toHitDifference < -7
     }
 
-    public static void triggerAttackAttribute(Supplier<AttackEvent> eventSupplier, Attack attack, Model defender) {
-        AttackEvent event = eventSupplier.get();
-        attack.getAttackAttributes()
+    public static void triggerAttackAttribute(Supplier<Event> eventSupplier, Attack attack, Model defender) {
+        Event event = eventSupplier.get();
+        attack.getSpecialRules()
                 .forEach(attribute ->
-                        attribute.onAttackEvent(event, attack, defender));
+                        attribute.onAttackAttributeEvent(event, attack, defender));
     }
 
-    private static AttackEvent getEventForToHitRoll(int roll) {
+    public static void triggerPersonalProtection(Supplier<Event> eventSupplier, List<Attack> attacks, Model defender) {
+        Event event = eventSupplier.get();
+        defender.getProtections()
+                .forEach(protection ->
+                        protection.onPersonalProtectionEvent(event, attacks, defender));
+    }
+
+    private static Event getEventForToHitRoll(int roll) {
         return switch (roll) {
-            case 1 -> AttackEvent.ROLLED_1_TO_HIT;
-            case 2 -> AttackEvent.ROLLED_2_TO_HIT;
-            case 3 -> AttackEvent.ROLLED_3_TO_HIT;
-            case 4 -> AttackEvent.ROLLED_4_TO_HIT;
-            case 5 -> AttackEvent.ROLLED_5_TO_HIT;
-            default -> AttackEvent.ROLLED_6_TO_HIT;
+            case 1 -> Event.ROLLED_1_TO_HIT;
+            case 2 -> Event.ROLLED_2_TO_HIT;
+            case 3 -> Event.ROLLED_3_TO_HIT;
+            case 4 -> Event.ROLLED_4_TO_HIT;
+            case 5 -> Event.ROLLED_5_TO_HIT;
+            default -> Event.ROLLED_6_TO_HIT;
         };
     }
 

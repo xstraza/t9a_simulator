@@ -1,14 +1,14 @@
-package gpt.attack.attribute.general;
+package gpt.specialRules.attribute.general;
 
-import gpt.attack.Attack;
-import gpt.attack.AttackAttribute;
-import gpt.attack.AttackEvent;
+import gpt.specialRules.Attack;
+import gpt.specialRules.SpecialRule;
+import gpt.specialRules.Event;
 import gpt.model.Model;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class MultipleWounds implements AttackAttribute {
+public class MultipleWounds implements SpecialRule {
     private final Supplier<Integer> woundSupplier;
     private final Function<Model, Integer> conditionalWoundFunction;
     public MultipleWounds(Supplier<Integer> woundSupplier) {
@@ -22,8 +22,8 @@ public class MultipleWounds implements AttackAttribute {
     }
 
     @Override
-    public void onAttackEvent(AttackEvent event, Attack attack, Model defender) {
-        if (event != AttackEvent.APPLY_MULTIPLE_WOUNDS) {
+    public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
+        if (event != Event.APPLY_MULTIPLE_WOUNDS) {
             return;
         }
         int woundAmount = conditionalWoundFunction.apply(defender) > 0

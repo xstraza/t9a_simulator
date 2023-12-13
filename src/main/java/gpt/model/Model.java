@@ -2,10 +2,11 @@ package gpt.model;
 
 
 import gpt.armor.Armor;
-import gpt.attack.Attack;
-import lombok.AccessLevel;
+import gpt.specialRules.Attack;
+import gpt.specialRules.SpecialRule;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,9 @@ public class Model {
     ModelType type;
     @Getter
     Height height;
-
-    public int getSpecialSave() {
-        return 10;
-    }
-
+    @Getter
+    @Setter
+    private int specialSave;
     public int getResilience() {
         return defensiveProfile.resilience();
     }
@@ -50,6 +49,10 @@ public class Model {
             }
         }
         return attacks;
+    }
+
+    public List<SpecialRule> getProtections() {
+        return defensiveProfile.protections();
     }
 }
 

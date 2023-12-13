@@ -1,7 +1,7 @@
 package gpt.model;
 
 import gpt.weapon.Weapon;
-import gpt.attack.AttackAttribute;
+import gpt.specialRules.SpecialRule;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public record OffensiveProfile(int attacks,
                                int armourPenetration,
                                int agility,
                                Weapon weapon,
-                               List<AttackAttribute> attackAttributes) {
+                               List<SpecialRule> specialRules) {
 }

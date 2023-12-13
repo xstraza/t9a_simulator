@@ -1,6 +1,6 @@
-package gpt.attack;
+package gpt.specialRules;
 
-public enum AttackEvent {
+public enum Event {
     ROLLED_1_TO_HIT,
     ROLLED_2_TO_HIT,
     ROLLED_3_TO_HIT,
@@ -10,6 +10,6 @@ public enum AttackEvent {
     TO_HIT_MODIFIER,
     DETERMINE_ATTACKS,
     CHARGE,
-    AGILITY_MODIFIER, APPLY_MULTIPLE_WOUNDS,
+    AGILITY_MODIFIER, APPLY_MULTIPLE_WOUNDS, SPECIAL_SAVE,
 
 }

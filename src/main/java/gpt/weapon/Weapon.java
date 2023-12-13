@@ -1,6 +1,6 @@
 package gpt.weapon;
 
-import gpt.attack.AttackAttribute;
+import gpt.specialRules.SpecialRule;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,15 +17,15 @@ public class Weapon {
     int agility;
     @Setter
     int agilityMultiplier;
-    private final List<AttackAttribute> attackAttributes;
+    private final List<SpecialRule> specialRules;
     private final WeaponType type;
 
-    protected Weapon(int strength, int armorPenetration, int agility, int agilityMultiplier, List<AttackAttribute> attributes, WeaponType type) {
+    protected Weapon(int strength, int armorPenetration, int agility, int agilityMultiplier, List<SpecialRule> attributes, WeaponType type) {
         this.strength = strength;
         this.armorPenetration = armorPenetration;
         this.agility = agility;
         this.agilityMultiplier = agilityMultiplier;
-        this.attackAttributes = new ArrayList<>(attributes);
+        this.specialRules = new ArrayList<>(attributes);
         this.type = type;
     }
 
@@ -35,7 +35,7 @@ public class Weapon {
                 this.armorPenetration,
                 this.agility,
                 this.agilityMultiplier,
-                new ArrayList<>(this.attackAttributes),
+                new ArrayList<>(this.specialRules),
                 this.type
         );
     }

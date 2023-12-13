@@ -5,5 +5,5 @@ public enum WeaponType {
     SPEAR,
     GREAT_WEAPON,
     LANCE,
-    LIGHT_LANCE,
+    LIGHT_LANCE, HALBERD,
 }

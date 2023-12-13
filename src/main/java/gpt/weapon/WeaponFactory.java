@@ -1,10 +1,10 @@
 package gpt.weapon;
 
-import gpt.attack.Attack;
-import gpt.attack.AttackAttribute;
-import gpt.attack.AttackEvent;
-import gpt.attack.attribute.general.DevastatingCharge;
-import gpt.attack.attribute.general.FightInExtraRank;
+import gpt.specialRules.Attack;
+import gpt.specialRules.SpecialRule;
+import gpt.specialRules.Event;
+import gpt.specialRules.attribute.general.DevastatingCharge;
+import gpt.specialRules.attribute.general.FightInExtraRank;
 import gpt.model.Model;
 import gpt.util.TriConsumer;
 
@@ -25,10 +25,13 @@ public class WeaponFactory {
     }
 
     public static Weapon aSpear() {
-        AttackAttribute spear = (event, attack, defender) -> {
-            if (event == AttackEvent.CHARGE && !attack.isCharging()) {
-                attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
-                attack.getWeapon().setAgility(attack.getWeapon().getAgility() + 2);
+        SpecialRule spear = new SpecialRule() {
+            @Override
+            public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
+                if (event == Event.CHARGE && !attack.isCharging()) {
+                    attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
+                    attack.getWeapon().setAgility(attack.getWeapon().getAgility() + 2);
+                }
             }
         };
         return new Weapon(
@@ -41,8 +44,8 @@ public class WeaponFactory {
     }
 
     public static Weapon aLance() {
-        TriConsumer<AttackEvent, Attack, Model> lance = (event, attack, defender) -> {
-            if (event == AttackEvent.CHARGE && attack.isCharging()) {
+        TriConsumer<Event, Attack, Model> lance = (event, attack, defender) -> {
+            if (event == Event.CHARGE && attack.isCharging()) {
                 attack.getWeapon().setStrength(attack.getWeapon().getStrength() + 2);
                 attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 2);
             }
@@ -58,8 +61,8 @@ public class WeaponFactory {
     }
 
     public static Weapon aLightLance() {
-        TriConsumer<AttackEvent, Attack, Model> lightLance = (event, attack, defender) -> {
-            if (event == AttackEvent.CHARGE && attack.isCharging()) {
+        TriConsumer<Event, Attack, Model> lightLance = (event, attack, defender) -> {
+            if (event == Event.CHARGE && attack.isCharging()) {
                 attack.getWeapon().setStrength(attack.getWeapon().getStrength() + 1);
                 attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
             }
@@ -82,6 +85,17 @@ public class WeaponFactory {
                 0,
                 Collections.emptyList(),
                 WeaponType.GREAT_WEAPON
+        );
+    }
+
+    public static Weapon aHalberd() {
+        return new Weapon(
+                1,
+                1,
+                0,
+                1,
+                Collections.emptyList(),
+                WeaponType.HALBERD
         );
     }
 }

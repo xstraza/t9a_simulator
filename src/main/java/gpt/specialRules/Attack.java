@@ -1,6 +1,6 @@
-package gpt.attack;
+package gpt.specialRules;
 
-import gpt.attack.attribute.general.ChargeAgilityBonus;
+import gpt.specialRules.attribute.general.ChargeAgilityBonus;
 import gpt.model.OffensiveProfile;
 import gpt.weapon.Weapon;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class Attack {
     private int agility;
     @Getter
     private Weapon weapon;
-    private List<AttackAttribute> attackAttributes;
+    private List<SpecialRule> specialRules;
 
     @Getter
     @Setter
@@ -55,8 +55,8 @@ public class Attack {
         this.agility = offensiveProfile.agility();
         this.weapon = offensiveProfile.weapon().copy();
         this.rank = rank;
-        this.attackAttributes = new ArrayList<>(offensiveProfile.attackAttributes());
-        this.attackAttributes.add(new ChargeAgilityBonus());
+        this.specialRules = new ArrayList<>(offensiveProfile.specialRules());
+        this.specialRules.add(new ChargeAgilityBonus());
         this.fier = fier;
         this.charging = charging;
     }
@@ -70,10 +70,10 @@ public class Attack {
     }
 
 
-    public List<AttackAttribute> getAttackAttributes() {
+    public List<SpecialRule> getSpecialRules() {
         return Stream.concat(
-                        attackAttributes.stream(),
-                        weapon.getAttackAttributes().stream())
+                        specialRules.stream(),
+                        weapon.getSpecialRules().stream())
                 .collect(Collectors.toList());
     }
 

@@ -1,6 +1,6 @@
-import gpt.attack.Attack;
+import gpt.specialRules.Attack;
 import gpt.Game;
-import gpt.attack.AttackEvent;
+import gpt.specialRules.Event;
 import gpt.model.Unit;
 import gpt.model.factory.HighElfFactory;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ public class GreatWeaponTest {
     @Test
     public void testLionGuardInitiative() {
         List<Attack> attacks = Game.getTotalAttacks(aLionGuardUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> AttackEvent.TO_HIT_MODIFIER, attack, null));
+        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, null));
         long attacksAtInitiative6 = attacks.stream()
                 .filter(a -> a.getAgility() == 5)
                 .count();
@@ -32,7 +32,7 @@ public class GreatWeaponTest {
     @Test
     public void testLionGuardPlusToHit() {
         List<Attack> attacks = Game.getTotalAttacks(aLionGuardUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> AttackEvent.TO_HIT_MODIFIER, attack, null));
+        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, null));
         long attacksWithoutPlusToHit = attacks.stream()
                 .filter(attack -> attack.getToHitModifier() == 0)
                 .count();
@@ -42,7 +42,7 @@ public class GreatWeaponTest {
     @Test
     public void testSwordMasterInitiative() {
         List<Attack> attacks = Game.getTotalAttacks(aSwordMasterUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> AttackEvent.TO_HIT_MODIFIER, attack, null));
+        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, null));
         long attacksAtInitiative6 = attacks.stream()
                 .filter(a -> a.getAgility() == 6)
                 .count();
@@ -52,7 +52,7 @@ public class GreatWeaponTest {
     @Test
     public void testSwordMasterPlusToHit() {
         List<Attack> attacks = Game.getTotalAttacks(aSwordMasterUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> AttackEvent.TO_HIT_MODIFIER, attack, null));
+        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, null));
         long attacksWithoutPlusToHit = attacks.stream()
                 .filter(attack -> attack.getToHitModifier() > 0)
                 .count();
