@@ -5,6 +5,7 @@ import gpt.specialRules.Event;
 import gpt.model.Model;
 import gpt.model.Unit;
 import gpt.util.Roll;
+import gpt.util.Tables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class Game {
             int toHitDifference = attack.getOffensiveSkill() - defender.getDefensiveSkill();
             triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, defender);
             int toHitModifier = attack.getToHitModifier();
-            int neededRoll = determineNeededToHitRoll(toHitDifference) - toHitModifier;
+            int neededRoll = Tables.determineNeededToHitRoll(toHitDifference) - toHitModifier;
 
             int roll = Roll.D6();
             triggerAttackAttribute(() -> getEventForToHitRoll(roll), attack, defender);
@@ -86,7 +87,7 @@ public class Game {
         List<Integer> rolls = new ArrayList<>();
         int wounds = 0;
         for (Attack attack : attacks) {
-            int neededRoll = determineNeededRoll(attack.getStrength(), defender.getResilience());
+            int neededRoll = Tables.determineNeededRoll(attack.getStrength(), defender.getResilience());
             for (int i = 0; i < attack.getHits(); i++) {
                 int roll = Roll.D6();
                 rolls.add(roll);
@@ -157,23 +158,6 @@ public class Game {
                 .collect(Collectors.joining(","));
         System.out.println("special save rolls:\n" + collect + "\n" + savesMade + " special save(s) made!\n");
         return attacksNotSpecialSaved;
-    }
-
-    private static int determineNeededRoll(int attackStrength, int defenderResilience) {
-        int difference = attackStrength - defenderResilience;
-        if (difference >= 2) return 2;
-        if (difference == 1) return 3;
-        if (difference == 0) return 4;
-        if (difference == -1) return 5;
-        return 6; // difference <= -2
-    }
-
-    private static int determineNeededToHitRoll(int toHitDifference) {
-        if (toHitDifference >= 4) return 2;
-        if (toHitDifference >= 1) return 3;
-        if (toHitDifference >= -3) return 4;
-        if (toHitDifference >= -7) return 5;
-        return 6; // toHitDifference < -7
     }
 
     public static void triggerAttackAttribute(Supplier<Event> eventSupplier, Attack attack, Model defender) {
