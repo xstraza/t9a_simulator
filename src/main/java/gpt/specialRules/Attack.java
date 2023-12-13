@@ -47,6 +47,8 @@ public class Attack {
 
     @Getter
     private boolean charging;
+    @Getter
+    private boolean flaming = false;
 
     public Attack(OffensiveProfile offensiveProfile, int rank, int fier, boolean charging) {
         this.offensiveSkill = offensiveProfile.offensiveSkill();
@@ -80,4 +82,5 @@ public class Attack {
     public int getAgility() {
         return (agility + weapon.getAgility()) * weapon.getAgilityMultiplier();
     }
+
 }

@@ -30,7 +30,7 @@ public class HighElfFactory extends ModelFactory {
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.heavyArmor());
         armors.add(ArmorFactory.shield());
-        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 2,armors, Collections.emptyList());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 2, armors, Collections.emptyList());
 
         return createStandardCavalry()
                 .name("Highborn Lancer")
@@ -50,7 +50,7 @@ public class HighElfFactory extends ModelFactory {
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
-        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 1,armors, Collections.emptyList());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 1, armors, Collections.emptyList());
 
         return createStandardCavalry()
                 .name("Elein Reaver")
@@ -67,7 +67,7 @@ public class HighElfFactory extends ModelFactory {
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
         armors.add(ArmorFactory.shield());
-        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0,armors, Collections.emptyList());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0, armors, Collections.emptyList());
 
         return createStandardInfantry()
                 .name("Sea Guard")
@@ -85,7 +85,7 @@ public class HighElfFactory extends ModelFactory {
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
         armors.add(ArmorFactory.shield());
-        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0,armors, Collections.emptyList());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0, armors, Collections.emptyList());
 
         return createStandardInfantry()
                 .name("Spearman")
@@ -101,7 +101,7 @@ public class HighElfFactory extends ModelFactory {
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
-        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0,armors, Collections.emptyList());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0, armors, Collections.emptyList());
 
         return createStandardInfantry()
                 .name("Archer")
@@ -113,7 +113,7 @@ public class HighElfFactory extends ModelFactory {
     public static Model createLionGuard() {
         List<SpecialRule> specialRules = new ArrayList<>();
         specialRules.add(new LightningReflexes());
-        specialRules.add(new MultipleWounds(model -> switch(model.getHeight()) {
+        specialRules.add(new MultipleWounds(model -> switch (model.getHeight()) {
             case STANDARD -> 1;
             case LARGE -> model.getType() == ModelType.CAVALRY || model.getType() == ModelType.BEAST
                     ? 2
@@ -125,7 +125,7 @@ public class HighElfFactory extends ModelFactory {
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.heavyArmor());
         armors.add(ArmorFactory.lionsFur());
-        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 5, 3, 0,armors, Collections.emptyList());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 5, 3, 0, armors, Collections.emptyList());
 
         return createStandardInfantry()
                 .name("Lion Guard")
@@ -142,7 +142,7 @@ public class HighElfFactory extends ModelFactory {
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.heavyArmor());
-        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 6, 3, 0,armors, Collections.emptyList());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 6, 3, 0, armors, Collections.emptyList());
 
         return createStandardInfantry()
                 .name("Sword Master")
@@ -167,6 +167,27 @@ public class HighElfFactory extends ModelFactory {
         return createStandardInfantry()
                 .name("Flame Warden")
                 .offensiveProfiles(List.of(offensiveProfile))
+                .defensiveProfile(defensiveProfile)
+                .build();
+    }
+
+    public static Model createKnightOfRyma() {
+        List<SpecialRule> attackAttributesElf = new ArrayList<>();
+        attackAttributesElf.add(new LightningReflexes());
+        OffensiveProfile offensiveProfileElf = new OffensiveProfile(2, 5, 4, 1, 6, WeaponFactory.aLance(), attackAttributesElf);
+
+        List<SpecialRule> specialRules = new ArrayList<>();
+        specialRules.add(new Harnessed());
+        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRules);
+
+        List<Armor> armors = new ArrayList<>();
+        armors.add(ArmorFactory.dragonForgedArmor());
+        armors.add(ArmorFactory.shield());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 5, 3, 2, armors, Collections.emptyList());
+
+        return createStandardCavalry()
+                .name("Knights of Ryma")
+                .offensiveProfiles(List.of(offensiveProfileElf, offensiveProfileHorse))
                 .defensiveProfile(defensiveProfile)
                 .build();
     }

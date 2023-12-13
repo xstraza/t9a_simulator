@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 public class MultipleWounds implements SpecialRule {
     private final Supplier<Integer> woundSupplier;
     private final Function<Model, Integer> conditionalWoundFunction;
+
     public MultipleWounds(Supplier<Integer> woundSupplier) {
         this.woundSupplier = woundSupplier;
         this.conditionalWoundFunction = model -> 0;

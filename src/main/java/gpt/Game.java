@@ -133,14 +133,15 @@ public class Game {
     private static List<Attack> rollForSpecialSave(List<Attack> attacks, Model defender) {
         List<Attack> attacksNotSpecialSaved = new ArrayList<>();
         List<Integer> rolls = new ArrayList<>();
-        triggerPersonalProtection(() -> Event.SPECIAL_SAVE, attacks, defender);
-        int neededRoll = defender.getSpecialSave();
-        if (neededRoll > 6) {
-            return attacks;
-        }
         int savesMade = 0;
         for (Attack attack : attacks) {
             for (int i = 0; i < attack.getWounds(); i++) {
+                triggerAttackAttribute(() -> Event.SPECIAL_SAVE, attack, defender);
+                int neededRoll = defender.getSpecialSave();
+                if (neededRoll > 6) {
+                    attacksNotSpecialSaved.add(attack);
+                    continue;
+                }
                 int roll = new Random().nextInt(6) + 1;
                 rolls.add(roll);
                 if (roll >= neededRoll && roll != 1) {
@@ -179,13 +180,9 @@ public class Game {
         attack.getSpecialRules()
                 .forEach(attribute ->
                         attribute.onAttackAttributeEvent(event, attack, defender));
-    }
-
-    public static void triggerPersonalProtection(Supplier<Event> eventSupplier, List<Attack> attacks, Model defender) {
-        Event event = eventSupplier.get();
         defender.getProtections()
                 .forEach(protection ->
-                        protection.onPersonalProtectionEvent(event, attacks, defender));
+                        protection.onAttackAttributeEvent(event, attack, defender));
     }
 
     private static Event getEventForToHitRoll(int roll) {
