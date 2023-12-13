@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 public class Attack {
     @Getter
     private int offensiveSkill;
-    @Getter
     private int strength;
     private int armourPenetration;
     @Setter
@@ -83,4 +82,7 @@ public class Attack {
         return (agility + weapon.getAgility()) * weapon.getAgilityMultiplier();
     }
 
+    public int getStrength() {
+        return strength + weapon.getStrength();
+    }
 }

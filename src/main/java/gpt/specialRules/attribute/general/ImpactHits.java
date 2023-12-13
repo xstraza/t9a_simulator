@@ -17,6 +17,6 @@ public class ImpactHits implements SpecialRule {
 
     @Override
     public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
-
+        //todo
     }
 }

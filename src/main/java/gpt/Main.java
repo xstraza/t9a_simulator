@@ -10,13 +10,12 @@ public class Main {
         int count = 100;
         double sumRemainingUnit1 = 0;
         double sumRemainingUnit2 = 0;
-        Model model1 = swordmaster();
-        Model model2 = flamewarden();
+        Model model1 = HighElfFactory.createSwordMaster();
+        Model model2 = HighElfFactory.createFlameWarden();
         for (int i = 0; i < count; i++) {
-            Unit unit1 = new Unit(10, model1, 5, true);
-            Unit unit2 = new Unit(15, model2, 5, false);
-            Game game = new Game();
-            game.fightARoundOfCombat(unit1, unit2);
+            Unit unit1 = new Unit(10, model1, 5, false);
+            Unit unit2 = new Unit(15, model2, 5, true);
+            Game.fightARoundOfCombat(unit1, unit2);
 
             System.out.println("Remaining " + unit1.getModel() + ": " + unit1.getNumberOfModels());
             System.out.println("Remaining " + unit2.getModel() + ": " + unit2.getNumberOfModels());
@@ -30,23 +29,4 @@ public class Main {
         System.out.println("Average remaining " + model2 + ": " + avg2);
     }
 
-    private static Model spearman() {
-        return HighElfFactory.createSpearman();
-    }
-
-    private static Model lancer() {
-        return HighElfFactory.createHighbornLancer();
-    }
-
-    private static Model swordmaster() {
-        return HighElfFactory.createSwordMaster();
-    }
-
-    private static Model flamewarden() {
-        return HighElfFactory.createFlameWarden();
-    }
-
-    private static Model lionguard() {
-        return HighElfFactory.createLionGuard();
-    }
 }

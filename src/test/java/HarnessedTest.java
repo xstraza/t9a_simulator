@@ -17,7 +17,7 @@ public class HarnessedTest {
 
     private void testHarnessed(int size, int frontage, int expected) {
         List<Attack> attacks = Game.getTotalAttacks(getLancerUnit(size, frontage));
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.DETERMINE_ATTACKS, attack, null));
+        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.DETERMINE_ATTACKS, attack, HighElfFactory.createArcher()));
         attacks = Game.removeInvalidAttacks(attacks);
         assertEquals(expected, attacks.size());
     }

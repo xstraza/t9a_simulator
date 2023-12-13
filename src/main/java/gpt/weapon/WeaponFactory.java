@@ -25,13 +25,10 @@ public class WeaponFactory {
     }
 
     public static Weapon aSpear() {
-        SpecialRule spear = new SpecialRule() {
-            @Override
-            public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
-                if (event == Event.CHARGE && !attack.isCharging()) {
-                    attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
-                    attack.getWeapon().setAgility(attack.getWeapon().getAgility() + 2);
-                }
+        SpecialRule spear = (event, attack, defender) -> {
+            if (event == Event.CHARGE && !attack.isCharging()) {
+                attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
+                attack.getWeapon().setAgility(attack.getWeapon().getAgility() + 2);
             }
         };
         return new Weapon(
