@@ -2,19 +2,19 @@ package gpt.model.factory;
 
 import gpt.armor.Armor;
 import gpt.specialRules.SpecialRule;
-import gpt.specialRules.attribute.general.FightInExtraRank;
-import gpt.specialRules.attribute.general.Harnessed;
-import gpt.specialRules.attribute.general.LightningReflexes;
-import gpt.specialRules.attribute.general.MultipleWounds;
+import gpt.specialRules.attribute.general.Inanimate;
+import gpt.specialRules.attribute.general.*;
 import gpt.specialRules.attribute.hbe.SwordSworn;
 import gpt.armor.ArmorFactory;
 import gpt.specialRules.protection.general.Aegis;
+import gpt.util.Roll;
 import gpt.weapon.WeaponFactory;
 import gpt.model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class HighElfFactory extends ModelFactory {
 
@@ -188,6 +188,36 @@ public class HighElfFactory extends ModelFactory {
         return createStandardCavalry()
                 .name("Knights of Ryma")
                 .offensiveProfiles(List.of(offensiveProfileElf, offensiveProfileHorse))
+                .defensiveProfile(defensiveProfile)
+                .build();
+    }
+
+    public static Model createReaverChariot() {
+        List<SpecialRule> attackAttributesCrew1 = new ArrayList<>();
+        attackAttributesCrew1.add(new LightningReflexes());
+        OffensiveProfile offensiveProfileCrew1 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1);
+
+        List<SpecialRule> attackAttributesCrew2 = new ArrayList<>();
+        attackAttributesCrew2.add(new LightningReflexes());
+        OffensiveProfile offensiveProfileCrew2 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1);
+
+        List<SpecialRule> specialRulesHorse1 = new ArrayList<>();
+        specialRulesHorse1.add(new Harnessed());
+        OffensiveProfile offensiveProfileHorse1 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse1);
+
+        List<SpecialRule> specialRulesHorse2 = new ArrayList<>();
+        specialRulesHorse2.add(new Harnessed());
+        OffensiveProfile offensiveProfileHorse2 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse2);
+
+        List<SpecialRule> attackAttributesChassis = new ArrayList<>();
+        attackAttributesChassis.add(new Inanimate());
+        attackAttributesChassis.add(new ImpactHits(() -> Roll.D6() + 1));
+        OffensiveProfile offensiveProfileChassis = new OffensiveProfile(-1, -1, 5, 2, -1, WeaponFactory.aHandWeapon(), attackAttributesChassis);
+
+        DefensiveProfile defensiveProfile = new DefensiveProfile(3, 4, 4, 2, Collections.emptyList(), Collections.emptyList());
+        return createLargeConstruct()
+                .name("Reaver Chariot")
+                .offensiveProfiles(List.of(offensiveProfileCrew1, offensiveProfileCrew2, offensiveProfileHorse1, offensiveProfileHorse2, offensiveProfileChassis))
                 .defensiveProfile(defensiveProfile)
                 .build();
     }

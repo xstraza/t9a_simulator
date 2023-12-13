@@ -4,6 +4,7 @@ import gpt.specialRules.Attack;
 import gpt.specialRules.Event;
 import gpt.model.Model;
 import gpt.model.Unit;
+import gpt.util.Roll;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class Game {
             int toHitModifier = attack.getToHitModifier();
             int neededRoll = determineNeededToHitRoll(toHitDifference) - toHitModifier;
 
-            int roll = new Random().nextInt(6) + 1;
+            int roll = Roll.D6();
             triggerAttackAttribute(() -> getEventForToHitRoll(roll), attack, defender);
             rolls.add(roll);
             if ((roll >= neededRoll && roll != 1) || roll == 6) {
@@ -87,7 +88,7 @@ public class Game {
         for (Attack attack : attacks) {
             int neededRoll = determineNeededRoll(attack.getStrength(), defender.getResilience());
             for (int i = 0; i < attack.getHits(); i++) {
-                int roll = new Random().nextInt(6) + 1;
+                int roll = Roll.D6();
                 rolls.add(roll);
                 if ((roll >= neededRoll && roll != 1) || roll == 6) {
                     wounds++;
@@ -114,7 +115,7 @@ public class Game {
                 continue;
             }
             for (int i = 0; i < attack.getWounds(); i++) {
-                int roll = new Random().nextInt(6) + 1;
+                int roll = Roll.D6();
                 rolls.add(roll);
                 if (roll >= neededRoll && roll != 1) {
                     savesMade++;
@@ -142,7 +143,7 @@ public class Game {
                     attacksNotSpecialSaved.add(attack);
                     continue;
                 }
-                int roll = new Random().nextInt(6) + 1;
+                int roll = Roll.D6();
                 rolls.add(roll);
                 if (roll >= neededRoll && roll != 1) {
                     savesMade++;

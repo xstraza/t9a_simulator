@@ -19,4 +19,11 @@ public abstract class ModelFactory {
                 .type(ModelType.CAVALRY)
                 .height(Height.STANDARD);
     }
+
+    public static Model.ModelBuilder createLargeConstruct() {
+        return Model.builder()
+                .specialSave(10)
+                .type(ModelType.CONSTRUCT)
+                .height(Height.LARGE);
+    }
 }
