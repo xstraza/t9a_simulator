@@ -22,17 +22,22 @@ public class Game {
             int woundsToUnit1 = attackUnit(unit2, unit1, agility);
             unit1.reduceModels(woundsToUnit1);
             unit2.reduceModels(woundsToUnit2);
+            System.out.println();
         }
     }
 
     public static int attackUnit(Unit attackers, Unit defenders, int agility) {
-        List<Attack> attacks = getTotalAttacks(attackers)
-                .stream()
+        List<Attack> attacks = getTotalAttacks(attackers);
+        attacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.CHARGE, attack, defenders.getModel()));
+        attacks = attacks.stream()
                 .filter(a -> a.getAgility() == agility)
                 .collect(Collectors.toList());
         attacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.DETERMINE_ATTACKS, attack, defenders.getModel()));
         attacks = removeInvalidAttacks(attacks);
         System.out.println(attackers.getModel() + " unit has " + attacks.size() + " attacks");
+        if (attacks.isEmpty()) {
+            return 0;
+        }
         attacks = performAttacks(attacks, defenders.getModel());
         return attacks.stream()
                 .mapToInt(a -> a.getWoundsCaused())
@@ -196,7 +201,7 @@ public class Game {
                 if (modelAtPosition.isPresent()) {
                     Model model = modelAtPosition.get();
                     int fier = unit.isLineFormation() ? 2 : 1;
-                    attacks.addAll(model.getAttacks(rank, fier));
+                    attacks.addAll(model.getAttacks(rank, fier, unit.isCharging()));
                 }
             }
         }

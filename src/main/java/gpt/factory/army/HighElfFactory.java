@@ -13,6 +13,28 @@ import java.util.List;
 
 public class HighElfFactory {
 
+    public Model createHighbornLancer() {
+        List<AttackAttribute> attackAttributesElf = new ArrayList<>();
+        attackAttributesElf.add(new LightningReflexes());
+        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 5, 3, 0, 5, WeaponFactory.aLance(), attackAttributesElf);
+
+        List<AttackAttribute> attackAttributes = new ArrayList<>();
+        attackAttributes.add(new LightningReflexes());
+        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), attackAttributes);
+
+        List<Armor> armors = new ArrayList<>();
+        armors.add(ArmorFactory.heavyArmor());
+        armors.add(ArmorFactory.shield());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 2, armors);
+
+        return new ModelBuilder()
+                .setName("Highborn Lancer")
+                .addOffensiveProfile(offensiveProfileElf)
+                .addOffensiveProfile(offensiveProfileHorse)
+                .setDefensiveProfile(defensiveProfile)
+                .build();
+    }
+
     public Model createSeaGuard() {
         List<AttackAttribute> attackAttributes = new ArrayList<>();
         attackAttributes.add(new LightningReflexes());

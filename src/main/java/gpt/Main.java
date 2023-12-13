@@ -6,8 +6,8 @@ import gpt.model.Unit;
 public class Main {
 
     public static void main(String[] args) {
-        Unit spearmenUnit = new Unit(15, new ArmyFactory().HighbornElves().createSpearman(), 8);
-        Unit archerUnit = new Unit(10, new ArmyFactory().HighbornElves().createArcher(), 5);
+        Unit spearmenUnit = new Unit(15, new ArmyFactory().HighbornElves().createSpearman(), 5, true);
+        Unit archerUnit = new Unit(10, new ArmyFactory().HighbornElves().createArcher(), 5, false);
 
         Game game = new Game();
         game.fightARoundOfCombat(spearmenUnit, archerUnit);

@@ -8,6 +8,6 @@ public enum AttackEvent {
     ROLLED_4_TO_HIT,
     ROLLED_5_TO_HIT,
     DETERMINE_ATTACKS,
-    ROLLED_6_TO_HIT
+    CHARGE, ROLLED_6_TO_HIT
 
 }

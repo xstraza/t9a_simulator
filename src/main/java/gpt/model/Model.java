@@ -46,11 +46,11 @@ public class Model {
         return defensiveProfile.defensiveSkill();
     }
 
-    public List<Attack> getAttacks(int rank, int fier) {
+    public List<Attack> getAttacks(int rank, int fier, boolean charging) {
         List<Attack> attacks = new ArrayList<>();
         for (OffensiveProfile offensiveProfile : offensiveProfiles) {
             for (int i = 0; i < offensiveProfile.attacks(); i++) {
-                Attack attack = new Attack(offensiveProfile, rank, fier);
+                Attack attack = new Attack(offensiveProfile, rank, fier, charging);
                 attacks.add(attack);
             }
         }
