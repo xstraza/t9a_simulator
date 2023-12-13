@@ -3,11 +3,14 @@ package gpt.model;
 
 import gpt.armor.Armor;
 import gpt.attack.Attack;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 public class Model {
     String name;
     List<OffensiveProfile> offensiveProfiles;
@@ -16,14 +19,6 @@ public class Model {
     ModelType type;
     @Getter
     Height height;
-
-    protected Model(String name, List<OffensiveProfile> offensiveProfiles, DefensiveProfile defensiveProfile, ModelType type, Height height) {
-        this.name = name;
-        this.offensiveProfiles = offensiveProfiles;
-        this.defensiveProfile = defensiveProfile;
-        this.type = type;
-        this.height = height;
-    }
 
     public int getSpecialSave() {
         return 10;

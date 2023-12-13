@@ -1,8 +1,8 @@
 package gpt;
 
-import gpt.factory.ArmyFactory;
 import gpt.model.Model;
 import gpt.model.Unit;
+import gpt.model.factory.HighElfFactory;
 
 public class Main {
 
@@ -31,18 +31,18 @@ public class Main {
     }
 
     private static Model spearman() {
-        return new ArmyFactory().HighbornElves().createSpearman();
+        return HighElfFactory.createSpearman();
     }
 
     private static Model lancer() {
-        return new ArmyFactory().HighbornElves().createHighbornLancer();
+        return HighElfFactory.createHighbornLancer();
     }
 
     private static Model swordmaster() {
-        return new ArmyFactory().HighbornElves().createSwordMaster();
+        return HighElfFactory.createSwordMaster();
     }
 
     private static Model lionguard() {
-        return new ArmyFactory().HighbornElves().createLionGuard();
+        return HighElfFactory.createLionGuard();
     }
 }

@@ -1,4 +1,4 @@
-package gpt.factory.army;
+package gpt.model.factory;
 
 import gpt.armor.Armor;
 import gpt.attack.AttackAttribute;
@@ -14,9 +14,9 @@ import gpt.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HighElfFactory {
+public class HighElfFactory extends ModelFactory {
 
-    public Model createHighbornLancer() {
+    public static Model createHighbornLancer() {
         List<AttackAttribute> attackAttributesElf = new ArrayList<>();
         attackAttributesElf.add(new LightningReflexes());
         OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLance(), attackAttributesElf);
@@ -30,17 +30,14 @@ public class HighElfFactory {
         armors.add(ArmorFactory.shield());
         DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 2, armors);
 
-        return new ModelBuilder()
-                .setName("Highborn Lancer")
-                .addOffensiveProfile(offensiveProfileElf)
-                .addOffensiveProfile(offensiveProfileHorse)
-                .setDefensiveProfile(defensiveProfile)
-                .setType(ModelType.CAVALRY)
-                .setHeight(Height.STANDARD)
+        return createStandardCavalry()
+                .name("Highborn Lancer")
+                .offensiveProfiles(List.of(offensiveProfileElf, offensiveProfileHorse))
+                .defensiveProfile(defensiveProfile)
                 .build();
     }
 
-    public Model createEleinReaver() {
+    public static Model createEleinReaver() {
         List<AttackAttribute> attackAttributesElf = new ArrayList<>();
         attackAttributesElf.add(new LightningReflexes());
         OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesElf);
@@ -53,17 +50,14 @@ public class HighElfFactory {
         armors.add(ArmorFactory.lightArmor());
         DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 1, armors);
 
-        return new ModelBuilder()
-                .setName("Elein Reaver")
-                .addOffensiveProfile(offensiveProfileElf)
-                .addOffensiveProfile(offensiveProfileHorse)
-                .setDefensiveProfile(defensiveProfile)
-                .setType(ModelType.CAVALRY)
-                .setHeight(Height.STANDARD)
+        return createStandardCavalry()
+                .name("Elein Reaver")
+                .offensiveProfiles(List.of(offensiveProfileElf, offensiveProfileHorse))
+                .defensiveProfile(defensiveProfile)
                 .build();
     }
 
-    public Model createSeaGuard() {
+    public static Model createSeaGuard() {
         List<AttackAttribute> attackAttributes = new ArrayList<>();
         attackAttributes.add(new LightningReflexes());
         OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 3, 0, 5, WeaponFactory.aHandWeapon(), attackAttributes);
@@ -73,16 +67,14 @@ public class HighElfFactory {
         armors.add(ArmorFactory.shield());
         DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0, armors);
 
-        return new ModelBuilder()
-                .setName("Sea Guard")
-                .addOffensiveProfile(offensiveProfile)
-                .setDefensiveProfile(defensiveProfile)
-                .setType(ModelType.INFANTRY)
-                .setHeight(Height.STANDARD)
+        return createStandardInfantry()
+                .name("Sea Guard")
+                .offensiveProfiles(List.of(offensiveProfile))
+                .defensiveProfile(defensiveProfile)
                 .build();
     }
 
-    public Model createSpearman() {
+    public static Model createSpearman() {
         List<AttackAttribute> attackAttributes = new ArrayList<>();
         attackAttributes.add(new LightningReflexes());
         attackAttributes.add(new FightInExtraRank());
@@ -93,16 +85,14 @@ public class HighElfFactory {
         armors.add(ArmorFactory.shield());
         DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0, armors);
 
-        return new ModelBuilder()
-                .setName("Spearman")
-                .addOffensiveProfile(offensiveProfile)
-                .setDefensiveProfile(defensiveProfile)
-                .setType(ModelType.INFANTRY)
-                .setHeight(Height.STANDARD)
+        return createStandardInfantry()
+                .name("Spearman")
+                .offensiveProfiles(List.of(offensiveProfile))
+                .defensiveProfile(defensiveProfile)
                 .build();
     }
 
-    public Model createArcher() {
+    public static Model createArcher() {
         List<AttackAttribute> attackAttributes = new ArrayList<>();
         attackAttributes.add(new LightningReflexes());
         OffensiveProfile offensiveProfile = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aHandWeapon(), attackAttributes);
@@ -111,28 +101,22 @@ public class HighElfFactory {
         armors.add(ArmorFactory.lightArmor());
         DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 0, armors);
 
-        return new ModelBuilder()
-                .setName("Archer")
-                .addOffensiveProfile(offensiveProfile)
-                .setDefensiveProfile(defensiveProfile)
-                .setType(ModelType.INFANTRY)
-                .setHeight(Height.STANDARD)
+        return createStandardInfantry()
+                .name("Archer")
+                .offensiveProfiles(List.of(offensiveProfile))
+                .defensiveProfile(defensiveProfile)
                 .build();
-
     }
 
-    public Model createLionGuard() {
+    public static Model createLionGuard() {
         List<AttackAttribute> attackAttributes = new ArrayList<>();
         attackAttributes.add(new LightningReflexes());
-        attackAttributes.add(new MultipleWounds(model -> {
-            if (model.getHeight() == Height.LARGE) {
-                if (model.getType() == ModelType.BEAST || model.getType() == ModelType.CAVALRY) {
-                    return 2;
-                }
-            } else if (model.getHeight() == Height.GIGANTIC) {
-                return 2;
-            }
-            return 1;
+        attackAttributes.add(new MultipleWounds(model -> switch(model.getHeight()) {
+            case STANDARD -> 1;
+            case LARGE -> model.getType() == ModelType.CAVALRY || model.getType() == ModelType.BEAST
+                    ? 2
+                    : 1;
+            case GIGANTIC -> 2;
         }));
         OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 4, 1, 5, WeaponFactory.aGreatWeapon(), attackAttributes);
 
@@ -141,16 +125,14 @@ public class HighElfFactory {
         armors.add(ArmorFactory.lionsFur());
         DefensiveProfile defensiveProfile = new DefensiveProfile(1, 5, 3, 0, armors);
 
-        return new ModelBuilder()
-                .setName("Lion Guard")
-                .addOffensiveProfile(offensiveProfile)
-                .setDefensiveProfile(defensiveProfile)
-                .setType(ModelType.INFANTRY)
-                .setHeight(Height.STANDARD)
+        return createStandardInfantry()
+                .name("Lion Guard")
+                .offensiveProfiles(List.of(offensiveProfile))
+                .defensiveProfile(defensiveProfile)
                 .build();
     }
 
-    public Model createSwordMaster() {
+    public static Model createSwordMaster() {
         List<AttackAttribute> attackAttributes = new ArrayList<>();
         attackAttributes.add(new LightningReflexes());
         attackAttributes.add(new SwordSworn());
@@ -160,12 +142,10 @@ public class HighElfFactory {
         armors.add(ArmorFactory.heavyArmor());
         DefensiveProfile defensiveProfile = new DefensiveProfile(1, 6, 3, 0, armors);
 
-        return new ModelBuilder()
-                .setName("Sword Master")
-                .addOffensiveProfile(offensiveProfile)
-                .setDefensiveProfile(defensiveProfile)
-                .setType(ModelType.INFANTRY)
-                .setHeight(Height.STANDARD)
+        return createStandardInfantry()
+                .name("Sword Master")
+                .offensiveProfiles(List.of(offensiveProfile))
+                .defensiveProfile(defensiveProfile)
                 .build();
     }
 }

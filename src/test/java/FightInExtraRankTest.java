@@ -1,8 +1,8 @@
 import gpt.attack.Attack;
 import gpt.Game;
 import gpt.attack.AttackEvent;
-import gpt.factory.ArmyFactory;
 import gpt.model.Unit;
+import gpt.model.factory.HighElfFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FightInExtraRankTest {
 
     private Unit getSpearmanUnit(int size, int frontage) {
-        return new Unit(size, new ArmyFactory().HighbornElves().createSpearman(), frontage, true);
+        return new Unit(size, HighElfFactory.createSpearman(), frontage, true);
     }
 
     private void testFier(int size, int frontage, int expected) {

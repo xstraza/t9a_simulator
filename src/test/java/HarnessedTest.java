@@ -1,8 +1,8 @@
 import gpt.attack.Attack;
 import gpt.Game;
 import gpt.attack.AttackEvent;
-import gpt.factory.ArmyFactory;
 import gpt.model.Unit;
+import gpt.model.factory.HighElfFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HarnessedTest {
 
     private Unit getLancerUnit(int size, int frontage) {
-        return new Unit(size, new ArmyFactory().HighbornElves().createHighbornLancer(), frontage, true);
+        return new Unit(size, HighElfFactory.createHighbornLancer(), frontage, true);
     }
 
     private void testHarnessed(int size, int frontage, int expected) {

@@ -1,8 +1,8 @@
 import gpt.attack.Attack;
 import gpt.Game;
 import gpt.attack.AttackEvent;
-import gpt.factory.ArmyFactory;
 import gpt.model.Unit;
+import gpt.model.factory.HighElfFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GreatWeaponTest {
 
     private Unit aLionGuardUnit() {
-        return new Unit(10, new ArmyFactory().HighbornElves().createLionGuard(), 5, false);
+        return new Unit(10, HighElfFactory.createLionGuard(), 5, false);
     }
 
     private Unit aSwordMasterUnit() {
-        return new Unit(5, new ArmyFactory().HighbornElves().createSwordMaster(), 5, false);
+        return new Unit(5, HighElfFactory.createSwordMaster(), 5, false);
     }
 
     @Test
