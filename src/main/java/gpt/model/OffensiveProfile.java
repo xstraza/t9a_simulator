@@ -1,7 +1,7 @@
 package gpt.model;
 
 import gpt.weapon.Weapon;
-import gpt.attackAttribute.AttackAttribute;
+import gpt.attack.AttackAttribute;
 
 import java.util.List;
 

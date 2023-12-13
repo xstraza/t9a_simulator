@@ -1,13 +1,13 @@
 package gpt.factory.army;
 
-import gpt.Armor;
-import gpt.attackAttribute.AttackAttribute;
-import gpt.attackAttribute.general.FightInExtraRank;
-import gpt.attackAttribute.general.Harnessed;
-import gpt.attackAttribute.general.LightningReflexes;
-import gpt.attackAttribute.general.MultipleWounds;
-import gpt.attackAttribute.hbe.SwordSworn;
-import gpt.factory.ArmorFactory;
+import gpt.armor.Armor;
+import gpt.attack.AttackAttribute;
+import gpt.attack.attribute.general.FightInExtraRank;
+import gpt.attack.attribute.general.Harnessed;
+import gpt.attack.attribute.general.LightningReflexes;
+import gpt.attack.attribute.general.MultipleWounds;
+import gpt.attack.attribute.hbe.SwordSworn;
+import gpt.armor.ArmorFactory;
 import gpt.weapon.WeaponFactory;
 import gpt.model.*;
 

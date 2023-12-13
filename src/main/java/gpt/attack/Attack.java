@@ -1,7 +1,6 @@
-package gpt;
+package gpt.attack;
 
-import gpt.attackAttribute.AttackAttribute;
-import gpt.attackAttribute.general.ChargeAgilityBonus;
+import gpt.attack.attribute.general.ChargeAgilityBonus;
 import gpt.model.OffensiveProfile;
 import gpt.weapon.Weapon;
 import lombok.Getter;

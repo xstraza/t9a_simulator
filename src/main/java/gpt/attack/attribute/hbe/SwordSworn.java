@@ -1,9 +1,9 @@
-package gpt.attackAttribute.hbe;
+package gpt.attack.attribute.hbe;
 
-import gpt.Attack;
+import gpt.attack.Attack;
 import gpt.weapon.WeaponType;
-import gpt.attackAttribute.AttackAttribute;
-import gpt.attackAttribute.AttackEvent;
+import gpt.attack.AttackAttribute;
+import gpt.attack.AttackEvent;
 import gpt.model.Model;
 
 public class SwordSworn implements AttackAttribute {

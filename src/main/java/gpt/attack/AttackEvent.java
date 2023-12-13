@@ -1,4 +1,4 @@
-package gpt.attackAttribute;
+package gpt.attack;
 
 public enum AttackEvent {
     ROLLED_1_TO_HIT,

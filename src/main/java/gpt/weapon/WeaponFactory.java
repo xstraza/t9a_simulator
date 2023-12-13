@@ -1,14 +1,13 @@
 package gpt.weapon;
 
-import gpt.Attack;
-import gpt.attackAttribute.AttackAttribute;
-import gpt.attackAttribute.AttackEvent;
-import gpt.attackAttribute.general.DevastatingCharge;
-import gpt.attackAttribute.general.FightInExtraRank;
+import gpt.attack.Attack;
+import gpt.attack.AttackAttribute;
+import gpt.attack.AttackEvent;
+import gpt.attack.attribute.general.DevastatingCharge;
+import gpt.attack.attribute.general.FightInExtraRank;
 import gpt.model.Model;
 import gpt.util.TriConsumer;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

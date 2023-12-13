@@ -1,8 +1,8 @@
 package gpt.model;
 
 
-import gpt.Armor;
-import gpt.Attack;
+import gpt.armor.Armor;
+import gpt.attack.Attack;
 import lombok.Getter;
 
 import java.util.ArrayList;

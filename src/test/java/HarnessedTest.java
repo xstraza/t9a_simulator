@@ -1,6 +1,6 @@
-import gpt.Attack;
+import gpt.attack.Attack;
 import gpt.Game;
-import gpt.attackAttribute.AttackEvent;
+import gpt.attack.AttackEvent;
 import gpt.factory.ArmyFactory;
 import gpt.model.Unit;
 import org.junit.jupiter.api.Test;

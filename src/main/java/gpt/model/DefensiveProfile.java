@@ -1,6 +1,6 @@
 package gpt.model;
 
-import gpt.Armor;
+import gpt.armor.Armor;
 
 import java.util.List;
 

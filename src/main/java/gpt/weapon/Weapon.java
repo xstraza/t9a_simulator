@@ -1,6 +1,6 @@
 package gpt.weapon;
 
-import gpt.attackAttribute.AttackAttribute;
+import gpt.attack.AttackAttribute;
 import lombok.Getter;
 import lombok.Setter;
 

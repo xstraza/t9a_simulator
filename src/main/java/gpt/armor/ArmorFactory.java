@@ -1,6 +1,6 @@
-package gpt.factory;
+package gpt.armor;
 
-import gpt.Armor;
+import gpt.armor.Armor;
 
 public class ArmorFactory {
 

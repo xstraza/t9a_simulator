@@ -1,6 +1,7 @@
 package gpt;
 
-import gpt.attackAttribute.AttackEvent;
+import gpt.attack.Attack;
+import gpt.attack.AttackEvent;
 import gpt.model.Model;
 import gpt.model.Unit;
 
@@ -10,7 +11,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Game {
 

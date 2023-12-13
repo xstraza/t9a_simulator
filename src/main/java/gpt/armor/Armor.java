@@ -1,12 +1,12 @@
-package gpt;
+package gpt.armor;
 
 import lombok.Getter;
 
+@Getter
 public class Armor {
-    @Getter
     int armorValue;
 
-    public Armor(int armorValue) {
+    protected Armor(int armorValue) {
         this.armorValue = armorValue;
     }
 }

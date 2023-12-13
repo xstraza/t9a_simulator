@@ -1,6 +1,5 @@
-package gpt.attackAttribute;
+package gpt.attack;
 
-import gpt.Attack;
 import gpt.model.Model;
 
 public interface AttackAttribute {
