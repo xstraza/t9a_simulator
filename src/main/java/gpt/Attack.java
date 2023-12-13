@@ -3,6 +3,7 @@ package gpt;
 import gpt.attackAttribute.AttackAttribute;
 import gpt.attackAttribute.general.ChargeAgilityBonus;
 import gpt.model.OffensiveProfile;
+import gpt.weapon.Weapon;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,7 +54,7 @@ public class Attack {
         this.strength = offensiveProfile.strength();
         this.armourPenetration = offensiveProfile.armourPenetration();
         this.agility = offensiveProfile.agility();
-        this.weapon = Weapon.clone(offensiveProfile.weapon());
+        this.weapon = offensiveProfile.weapon().copy();
         this.rank = rank;
         this.attackAttributes = new ArrayList<>(offensiveProfile.attackAttributes());
         this.attackAttributes.add(new ChargeAgilityBonus());
@@ -78,6 +79,6 @@ public class Attack {
     }
 
     public int getAgility() {
-        return (agility + weapon.agility) * weapon.getAgilityMultiplier();
+        return (agility + weapon.getAgility()) * weapon.getAgilityMultiplier();
     }
 }

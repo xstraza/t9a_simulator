@@ -8,12 +8,11 @@ import gpt.attackAttribute.general.LightningReflexes;
 import gpt.attackAttribute.general.MultipleWounds;
 import gpt.attackAttribute.hbe.SwordSworn;
 import gpt.factory.ArmorFactory;
-import gpt.factory.WeaponFactory;
+import gpt.weapon.WeaponFactory;
 import gpt.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class HighElfFactory {
 

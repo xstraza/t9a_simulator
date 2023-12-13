@@ -3,16 +3,10 @@ package gpt.model;
 
 import gpt.Armor;
 import gpt.Attack;
-import gpt.Weapon;
-import gpt.attackAttribute.AttackAttribute;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Model {
     String name;

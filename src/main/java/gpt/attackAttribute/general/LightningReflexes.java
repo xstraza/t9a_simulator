@@ -1,7 +1,7 @@
 package gpt.attackAttribute.general;
 
 import gpt.Attack;
-import gpt.WeaponType;
+import gpt.weapon.WeaponType;
 import gpt.attackAttribute.AttackAttribute;
 import gpt.attackAttribute.AttackEvent;
 import gpt.model.Model;
