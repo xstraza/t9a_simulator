@@ -1,6 +1,8 @@
-package gpt.attackAttribute;
+package gpt.attackAttribute.general;
 
 import gpt.Attack;
+import gpt.attackAttribute.AttackAttribute;
+import gpt.attackAttribute.AttackEvent;
 import gpt.model.Model;
 import gpt.util.TriConsumer;
 

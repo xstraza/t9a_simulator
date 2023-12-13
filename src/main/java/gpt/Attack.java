@@ -1,7 +1,7 @@
 package gpt;
 
 import gpt.attackAttribute.AttackAttribute;
-import gpt.attackAttribute.ChargeAgilityBonus;
+import gpt.attackAttribute.general.ChargeAgilityBonus;
 import gpt.model.OffensiveProfile;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +17,7 @@ public class Attack {
     @Getter
     private int strength;
     private int armourPenetration;
-    @Getter @Setter
+    @Setter
     private int agility;
     @Getter
     private Weapon weapon;
@@ -52,7 +52,7 @@ public class Attack {
         this.strength = offensiveProfile.strength();
         this.armourPenetration = offensiveProfile.armourPenetration();
         this.agility = offensiveProfile.agility();
-        this.weapon = offensiveProfile.weapon();
+        this.weapon = Weapon.clone(offensiveProfile.weapon());
         this.rank = rank;
         this.attackAttributes = new ArrayList<>(offensiveProfile.attackAttributes());
         this.attackAttributes.add(new ChargeAgilityBonus());
@@ -74,5 +74,9 @@ public class Attack {
                         attackAttributes.stream(),
                         weapon.getAttackAttributes().stream())
                 .collect(Collectors.toList());
+    }
+
+    public int getAgility() {
+        return Math.max(0, agility + weapon.agility);
     }
 }

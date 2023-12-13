@@ -2,8 +2,9 @@ package gpt.factory.army;
 
 import gpt.Armor;
 import gpt.attackAttribute.AttackAttribute;
-import gpt.attackAttribute.FightInExtraRank;
-import gpt.attackAttribute.LightningReflexes;
+import gpt.attackAttribute.general.FightInExtraRank;
+import gpt.attackAttribute.general.Harnessed;
+import gpt.attackAttribute.general.LightningReflexes;
 import gpt.factory.ArmorFactory;
 import gpt.factory.WeaponFactory;
 import gpt.model.*;
@@ -16,10 +17,10 @@ public class HighElfFactory {
     public Model createHighbornLancer() {
         List<AttackAttribute> attackAttributesElf = new ArrayList<>();
         attackAttributesElf.add(new LightningReflexes());
-        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 5, 3, 0, 5, WeaponFactory.aLance(), attackAttributesElf);
+        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLance(), attackAttributesElf);
 
         List<AttackAttribute> attackAttributes = new ArrayList<>();
-        attackAttributes.add(new LightningReflexes());
+        attackAttributes.add(new Harnessed());
         OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), attackAttributes);
 
         List<Armor> armors = new ArrayList<>();
@@ -29,6 +30,27 @@ public class HighElfFactory {
 
         return new ModelBuilder()
                 .setName("Highborn Lancer")
+                .addOffensiveProfile(offensiveProfileElf)
+                .addOffensiveProfile(offensiveProfileHorse)
+                .setDefensiveProfile(defensiveProfile)
+                .build();
+    }
+
+    public Model createEleinReaver() {
+        List<AttackAttribute> attackAttributesElf = new ArrayList<>();
+        attackAttributesElf.add(new LightningReflexes());
+        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesElf);
+
+        List<AttackAttribute> attackAttributes = new ArrayList<>();
+        attackAttributes.add(new Harnessed());
+        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), attackAttributes);
+
+        List<Armor> armors = new ArrayList<>();
+        armors.add(ArmorFactory.lightArmor());
+        DefensiveProfile defensiveProfile = new DefensiveProfile(1, 4, 3, 1, armors);
+
+        return new ModelBuilder()
+                .setName("Elein Reaver")
                 .addOffensiveProfile(offensiveProfileElf)
                 .addOffensiveProfile(offensiveProfileHorse)
                 .setDefensiveProfile(defensiveProfile)

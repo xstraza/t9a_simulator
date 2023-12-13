@@ -16,24 +16,39 @@ public class Weapon {
     int agility;
     @Getter
     List<AttackAttribute> attackAttributes = new ArrayList<>();
+    @Getter
+    private final WeaponType type;
 
-    public Weapon(int strength, int armorPenetration, int agility, AttackAttribute attribute) {
+    public Weapon(int strength, int armorPenetration, int agility, AttackAttribute attribute, WeaponType type) {
         this.strength = strength;
         this.armorPenetration = armorPenetration;
         this.agility = agility;
         this.attackAttributes.add(attribute);
+        this.type = type;
     }
 
-    public Weapon(int strength, int armorPenetration, int agility, List<AttackAttribute> attributes) {
+    public Weapon(int strength, int armorPenetration, int agility, List<AttackAttribute> attributes, WeaponType type) {
         this.strength = strength;
         this.armorPenetration = armorPenetration;
         this.agility = agility;
         this.attackAttributes.addAll(attributes);
+        this.type = type;
     }
 
-    public Weapon(int strength, int armorPenetration, int agility) {
+    public Weapon(int strength, int armorPenetration, int agility, WeaponType type) {
         this.strength = strength;
         this.armorPenetration = armorPenetration;
         this.agility = agility;
+        this.type = type;
+    }
+
+    public static Weapon clone(Weapon weapon) {
+        return new Weapon(
+                weapon.strength,
+                weapon.armorPenetration,
+                weapon.agility,
+                new ArrayList<>(weapon.attackAttributes),
+                weapon.type
+        );
     }
 }

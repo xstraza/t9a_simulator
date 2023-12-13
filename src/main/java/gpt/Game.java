@@ -15,31 +15,28 @@ public class Game {
 
     public static void fightARoundOfCombat(Unit unit1, Unit unit2) {
         for (int agility = 10; agility >= 0; agility--) {
-            System.out.println("agility " + agility);
-            System.out.println(unit1.getModel() + " attacking");
             int woundsToUnit2 = attackUnit(unit1, unit2, agility);
-            System.out.println(unit2.getModel() + " attacking");
             int woundsToUnit1 = attackUnit(unit2, unit1, agility);
             unit1.reduceModels(woundsToUnit1);
             unit2.reduceModels(woundsToUnit2);
-            System.out.println();
         }
     }
 
     public static int attackUnit(Unit attackers, Unit defenders, int agility) {
         List<Attack> attacks = getTotalAttacks(attackers);
+        attacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.AGILITY_MODIFIER, attack, defenders.getModel()));
         attacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.CHARGE, attack, defenders.getModel()));
-        attacks = attacks.stream()
+        List<Attack> attacksForAgility = attacks.stream()
                 .filter(a -> a.getAgility() == agility)
                 .collect(Collectors.toList());
-        attacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.DETERMINE_ATTACKS, attack, defenders.getModel()));
-        attacks = removeInvalidAttacks(attacks);
-        System.out.println(attackers.getModel() + " unit has " + attacks.size() + " attacks");
-        if (attacks.isEmpty()) {
+        attacksForAgility.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.DETERMINE_ATTACKS, attack, defenders.getModel()));
+        List<Attack> validAttacks = removeInvalidAttacks(attacksForAgility);
+        if (validAttacks.isEmpty()) {
             return 0;
         }
-        attacks = performAttacks(attacks, defenders.getModel());
-        return attacks.stream()
+        System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + agility);
+        List<Attack> successfulAttacks = performAttacks(validAttacks, defenders.getModel());
+        return successfulAttacks.stream()
                 .mapToInt(a -> a.getWoundsCaused())
                 .sum();
     }
