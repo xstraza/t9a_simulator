@@ -42,6 +42,7 @@ public class Attack {
     @Getter
     @Setter
     private int rank;
+    @Setter
     private int woundMultiplier = 1;
 
     @Getter
@@ -77,6 +78,6 @@ public class Attack {
     }
 
     public int getAgility() {
-        return Math.max(0, agility + weapon.agility);
+        return (agility + weapon.agility) * weapon.getAgilityMultiplier();
     }
 }

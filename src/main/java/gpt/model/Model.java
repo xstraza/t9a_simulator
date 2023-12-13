@@ -18,11 +18,17 @@ public class Model {
     String name;
     List<OffensiveProfile> offensiveProfiles;
     DefensiveProfile defensiveProfile;
+    @Getter
+    ModelType type;
+    @Getter
+    Height height;
 
-    protected Model(String name, List<OffensiveProfile> offensiveProfiles, DefensiveProfile defensiveProfile) {
+    protected Model(String name, List<OffensiveProfile> offensiveProfiles, DefensiveProfile defensiveProfile, ModelType type, Height height) {
         this.name = name;
         this.offensiveProfiles = offensiveProfiles;
         this.defensiveProfile = defensiveProfile;
+        this.type = type;
+        this.height = height;
     }
 
     public int getSpecialSave() {

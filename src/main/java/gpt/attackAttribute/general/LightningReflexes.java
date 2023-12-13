@@ -14,7 +14,7 @@ public class LightningReflexes implements AttackAttribute {
             return;
         }
         if (attack.getWeapon().getType().equals(WeaponType.GREAT_WEAPON)) {
-            attack.getWeapon().setAgility(0);
+            attack.getWeapon().setAgilityMultiplier(1);
         } else {
             attack.setToHitModifier(attack.getToHitModifier() + 1);
         }

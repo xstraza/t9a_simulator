@@ -55,7 +55,9 @@ public class WeaponFactory {
     }
 
     public static Weapon aGreatWeapon() {
-        return new Weapon(2, 2, -20, WeaponType.GREAT_WEAPON);
+        Weapon weapon = new Weapon(2, 2, 0, WeaponType.GREAT_WEAPON);
+        weapon.setAgilityMultiplier(0);
+        return weapon;
     }
 
     private static void lightLance(AttackEvent event, Attack attack, Model model) {

@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Game {
 
@@ -36,8 +37,9 @@ public class Game {
         }
         System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + agility);
         List<Attack> successfulAttacks = performAttacks(validAttacks, defenders.getModel());
+        successfulAttacks.forEach(attack -> triggerAttackAttribute(() -> AttackEvent.APPLY_MULTIPLE_WOUNDS, attack, defenders.getModel()));
         return successfulAttacks.stream()
-                .mapToInt(a -> a.getWoundsCaused())
+                .mapToInt(Attack::getWoundsCaused)
                 .sum();
     }
 

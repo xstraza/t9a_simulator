@@ -14,6 +14,8 @@ public class Weapon {
     int armorPenetration;
     @Getter @Setter
     int agility;
+    @Getter @Setter
+    int agilityMultiplier = 1;
     @Getter
     List<AttackAttribute> attackAttributes = new ArrayList<>();
     @Getter

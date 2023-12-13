@@ -19,4 +19,8 @@ public class ArmorFactory {
     public static Armor shield() {
         return new Armor(1);
     }
+
+    public static Armor lionsFur() {
+        return new Armor(1);
+    }
 }
