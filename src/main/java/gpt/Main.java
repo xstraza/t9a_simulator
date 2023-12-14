@@ -1,5 +1,6 @@
 package gpt;
 
+import gpt.game.Combat;
 import gpt.model.Model;
 import gpt.model.Unit;
 import gpt.model.factory.HighElfFactory;
@@ -15,7 +16,7 @@ public class Main {
         for (int i = 0; i < count; i++) {
             Unit unit1 = new Unit(10, model1, 5, false);
             Unit unit2 = new Unit(15, model2, 5, true);
-            Game.fightARoundOfCombat(unit1, unit2);
+            Combat.combat(unit1, unit2);
 
             System.out.println("Remaining " + unit1.getModel() + ": " + unit1.getNumberOfModels());
             System.out.println("Remaining " + unit2.getModel() + ": " + unit2.getNumberOfModels());

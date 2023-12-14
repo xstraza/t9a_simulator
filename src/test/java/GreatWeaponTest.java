@@ -1,8 +1,9 @@
-import gpt.specialRules.Attack;
-import gpt.Game;
-import gpt.specialRules.Event;
+import gpt.game.Combat;
 import gpt.model.Unit;
 import gpt.model.factory.HighElfFactory;
+import gpt.specialRules.Attack;
+import gpt.specialRules.Event;
+import gpt.specialRules.SpecialRule;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -21,8 +22,8 @@ public class GreatWeaponTest {
 
     @Test
     public void testLionGuardInitiative() {
-        List<Attack> attacks = Game.getTotalAttacks(aLionGuardUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
+        List<Attack> attacks = Combat.getAttacks(aLionGuardUnit());
+        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
         long attacksAtInitiative6 = attacks.stream()
                 .filter(a -> a.getAgility() == 5)
                 .count();
@@ -31,8 +32,8 @@ public class GreatWeaponTest {
 
     @Test
     public void testLionGuardPlusToHit() {
-        List<Attack> attacks = Game.getTotalAttacks(aLionGuardUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
+        List<Attack> attacks = Combat.getAttacks(aLionGuardUnit());
+        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
         long attacksWithoutPlusToHit = attacks.stream()
                 .filter(attack -> attack.getToHitModifier() == 0)
                 .count();
@@ -41,8 +42,8 @@ public class GreatWeaponTest {
 
     @Test
     public void testSwordMasterInitiative() {
-        List<Attack> attacks = Game.getTotalAttacks(aSwordMasterUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
+        List<Attack> attacks = Combat.getAttacks(aSwordMasterUnit());
+        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
         long attacksAtInitiative6 = attacks.stream()
                 .filter(a -> a.getAgility() == 6)
                 .count();
@@ -51,8 +52,8 @@ public class GreatWeaponTest {
 
     @Test
     public void testSwordMasterPlusToHit() {
-        List<Attack> attacks = Game.getTotalAttacks(aSwordMasterUnit());
-        attacks.forEach(attack -> Game.triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
+        List<Attack> attacks = Combat.getAttacks(aSwordMasterUnit());
+        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.TO_HIT_MODIFIER, attack, HighElfFactory.createArcher()));
         long attacksWithoutPlusToHit = attacks.stream()
                 .filter(attack -> attack.getToHitModifier() > 0)
                 .count();

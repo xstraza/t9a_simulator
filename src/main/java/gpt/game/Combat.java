@@ -1,53 +1,44 @@
-package gpt;
+package gpt.game;
 
-import gpt.specialRules.Attack;
-import gpt.specialRules.Event;
 import gpt.model.Model;
 import gpt.model.Unit;
+import gpt.specialRules.Attack;
+import gpt.specialRules.Event;
+import gpt.specialRules.SpecialRule;
 import gpt.util.Roll;
 import gpt.util.Tables;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class Game {
+public class Combat {
 
-    public static void fightARoundOfCombat(Unit unit1, Unit unit2) {
-        for (int agility = 10; agility >= 0; agility--) {
-            int woundsToUnit2 = attackUnit(unit1, unit2, agility);
-            int woundsToUnit1 = attackUnit(unit2, unit1, agility);
-            unit1.reduceModels(woundsToUnit1);
-            unit2.reduceModels(woundsToUnit2);
+    public static void combat(Unit unit1, Unit unit2) {
+        startOfCombat(unit1, unit2);
+        chooseWeapons(unit1, unit2);
+        makeWay(unit1, unit2);
+        for (int initiative = 10; initiative >= 0; initiative--) {
+            rollMeleeAttacks(unit1, unit2, initiative);
         }
+        calculateWinnerAndBreakTest(unit1, unit2);
     }
 
-    public static int attackUnit(Unit attackers, Unit defenders, int agility) {
-        List<Attack> attacks = getTotalAttacks(attackers);
-        attacks.forEach(attack -> triggerAttackAttribute(() -> Event.AGILITY_MODIFIER, attack, defenders.getModel()));
-        attacks.forEach(attack -> triggerAttackAttribute(() -> Event.CHARGE, attack, defenders.getModel()));
-        List<Attack> attacksForAgility = attacks.stream()
-                .filter(a -> a.getAgility() == agility)
-                .collect(Collectors.toList());
-        attacksForAgility.forEach(attack -> triggerAttackAttribute(() -> Event.DETERMINE_ATTACKS, attack, defenders.getModel()));
-        List<Attack> validAttacks = removeInvalidAttacks(attacksForAgility);
-        if (validAttacks.isEmpty()) {
-            return 0;
-        }
-        System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + agility);
-        List<Attack> successfulAttacks = performAttacks(validAttacks, defenders.getModel());
-        successfulAttacks.forEach(attack -> triggerAttackAttribute(() -> Event.APPLY_MULTIPLE_WOUNDS, attack, defenders.getModel()));
+    private static void rollMeleeAttacks(Unit unit1, Unit unit2, int initiative) {
+        int woundsToUnit2 = attack(unit1, unit2, initiative);
+        int woundsToUnit1 = attack(unit2, unit1, initiative);
+        unit1.reduceModels(woundsToUnit1);
+        unit2.reduceModels(woundsToUnit2);
+    }
+
+    private static int attack(Unit attackers, Unit defenders, int initiative) {
+        List<Attack> attacks = getAttacks(attackers, defenders, initiative);
+        List<Attack> successfulAttacks = performAttacks(attacks, defenders.getModel());
+        successfulAttacks.forEach(attack -> SpecialRule.trigger(() -> Event.APPLY_MULTIPLE_WOUNDS, attack, defenders.getModel()));
         return successfulAttacks.stream()
                 .mapToInt(Attack::getWoundsCaused)
                 .sum();
-    }
-
-    public static List<Attack> removeInvalidAttacks(List<Attack> attacks) {
-        return attacks.stream()
-                .filter(attack -> attack.getRank() <= 2 || attack.getRank() <= 1 + attack.getFier())
-                .collect(Collectors.toList());
     }
 
     public static List<Attack> performAttacks(List<Attack> attacks, Model defender) {
@@ -63,12 +54,12 @@ public class Game {
         int hits = 0;
         for (Attack attack : attacks) {
             int toHitDifference = attack.getOffensiveSkill() - defender.getDefensiveSkill();
-            triggerAttackAttribute(() -> Event.TO_HIT_MODIFIER, attack, defender);
+            SpecialRule.trigger(() -> Event.TO_HIT_MODIFIER, attack, defender);
             int toHitModifier = attack.getToHitModifier();
             int neededRoll = Tables.determineNeededToHitRoll(toHitDifference) - toHitModifier;
 
             int roll = Roll.D6();
-            triggerAttackAttribute(() -> getEventForToHitRoll(roll), attack, defender);
+            SpecialRule.trigger(() -> Event.getEventForToHitRoll(roll), attack, defender);
             rolls.add(roll);
             if ((roll >= neededRoll && roll != 1) || roll == 6) {
                 hits++;
@@ -137,7 +128,7 @@ public class Game {
         int savesMade = 0;
         for (Attack attack : attacks) {
             for (int i = 0; i < attack.getWounds(); i++) {
-                triggerAttackAttribute(() -> Event.SPECIAL_SAVE, attack, defender);
+                SpecialRule.trigger(() -> Event.SPECIAL_SAVE, attack, defender);
                 int neededRoll = defender.getSpecialSave();
                 if (neededRoll > 6) {
                     attacksNotSpecialSaved.add(attack);
@@ -159,41 +150,49 @@ public class Game {
         return attacksNotSpecialSaved;
     }
 
-    public static void triggerAttackAttribute(Supplier<Event> eventSupplier, Attack attack, Model defender) {
-        Event event = eventSupplier.get();
-        attack.getSpecialRules()
-                .forEach(attribute ->
-                        attribute.onEvent(event, attack, defender));
-        defender.getProtections()
-                .forEach(protection ->
-                        protection.onEvent(event, attack, defender));
+    public static List<Attack> removeInvalidAttacks(List<Attack> attacks) {
+        return attacks.stream()
+                .filter(attack -> attack.getRank() <= 2 || attack.getRank() <= 1 + attack.getFier())
+                .collect(Collectors.toList());
     }
 
-    private static Event getEventForToHitRoll(int roll) {
-        return switch (roll) {
-            case 1 -> Event.ROLLED_1_TO_HIT;
-            case 2 -> Event.ROLLED_2_TO_HIT;
-            case 3 -> Event.ROLLED_3_TO_HIT;
-            case 4 -> Event.ROLLED_4_TO_HIT;
-            case 5 -> Event.ROLLED_5_TO_HIT;
-            default -> Event.ROLLED_6_TO_HIT;
-        };
-    }
-
-    public static List<Attack> getTotalAttacks(Unit unit) {
+    public static List<Attack> getAttacks(Unit attackers, Unit defenders, int initiative) {
         List<Attack> attacks = new ArrayList<>();
-        int maxModelsInUnit = (unit.getNumberOfModels() + unit.getFrontage() - 1) / unit.getFrontage() * unit.getFrontage();
-        for (int rank = 1; rank <= maxModelsInUnit / unit.getFrontage(); rank++) {
-            for (int file = 1; file <= unit.getFrontage(); file++) {
-                Optional<Model> modelAtPosition = unit.getModelAtPosition(rank, file);
+        int maxModelsInUnit = (attackers.getNumberOfModels() + attackers.getFrontage() - 1) / attackers.getFrontage() * attackers.getFrontage();
+        for (int rank = 1; rank <= maxModelsInUnit / attackers.getFrontage(); rank++) {
+            for (int file = 1; file <= attackers.getFrontage(); file++) {
+                Optional<Model> modelAtPosition = attackers.getModelAtPosition(rank, file);
                 if (modelAtPosition.isPresent()) {
                     Model model = modelAtPosition.get();
-                    int fier = unit.isLineFormation() ? 2 : 1;
-                    attacks.addAll(model.getAttacks(rank, fier, unit.isCharging()));
+                    int fier = attackers.isLineFormation() ? 2 : 1;
+                    attacks.addAll(model.getAttacks(rank, fier, attackers.isCharging()));
                 }
             }
         }
-        return attacks;
+        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.AGILITY_MODIFIER, attack, defenders.getModel()));
+        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.CHARGE, attack, defenders.getModel()));
+        List<Attack> attacksForAgility = attacks.stream()
+                .filter(a -> a.getAgility() == initiative)
+                .collect(Collectors.toList());
+        attacksForAgility.forEach(attack -> SpecialRule.trigger(() -> Event.DETERMINE_ATTACKS, attack, defenders.getModel()));
+        List<Attack> validAttacks = removeInvalidAttacks(attacksForAgility);
+        System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + initiative);
+        return validAttacks;
+    }
+
+    private static void calculateWinnerAndBreakTest(Unit unit1, Unit unit2) {
+
+    }
+
+    private static void makeWay(Unit unit1, Unit unit2) {
+
+    }
+
+    private static void chooseWeapons(Unit unit1, Unit unit2) {
+
+    }
+
+    private static void startOfCombat(Unit unit1, Unit unit2) {
+
     }
 }
-
