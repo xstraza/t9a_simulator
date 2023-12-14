@@ -10,7 +10,6 @@ import gpt.util.Tables;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -164,10 +163,10 @@ public class Game {
         Event event = eventSupplier.get();
         attack.getSpecialRules()
                 .forEach(attribute ->
-                        attribute.onAttackAttributeEvent(event, attack, defender));
+                        attribute.onEvent(event, attack, defender));
         defender.getProtections()
                 .forEach(protection ->
-                        protection.onAttackAttributeEvent(event, attack, defender));
+                        protection.onEvent(event, attack, defender));
     }
 
     private static Event getEventForToHitRoll(int roll) {

@@ -7,7 +7,7 @@ import gpt.model.Model;
 
 public class BattleFocus implements SpecialRule {
     @Override
-    public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
+    public void onEvent(Event event, Attack attack, Model defender) {
         if (event != Event.ROLLED_6_TO_HIT) {
             return;
         }

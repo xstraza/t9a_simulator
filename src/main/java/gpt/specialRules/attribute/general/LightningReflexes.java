@@ -9,7 +9,7 @@ import gpt.model.Model;
 public class LightningReflexes implements SpecialRule {
 
     @Override
-    public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
+    public void onEvent(Event event, Attack attack, Model defender) {
         if (event == Event.TO_HIT_MODIFIER || event == Event.AGILITY_MODIFIER) {
             if (attack.getWeapon().getType().equals(WeaponType.GREAT_WEAPON)) {
                 attack.getWeapon().setAgilityMultiplier(1);

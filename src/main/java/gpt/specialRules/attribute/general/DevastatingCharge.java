@@ -15,7 +15,7 @@ public class DevastatingCharge implements SpecialRule {
     }
 
     @Override
-    public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
+    public void onEvent(Event event, Attack attack, Model defender) {
         consumer.accept(event, attack, defender);
     }
 }

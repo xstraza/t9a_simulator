@@ -23,7 +23,7 @@ public class Aegis implements SpecialRule {
     }
 
     @Override
-    public void onAttackAttributeEvent(Event event, Attack attack, Model defender) {
+    public void onEvent(Event event, Attack attack, Model defender) {
         if (event == Event.SPECIAL_SAVE) {
             Integer apply = conditionalRollNeeded.apply(attack);
             int min = Math.min(rollNeeded, apply);
