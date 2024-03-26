@@ -52,6 +52,7 @@ public class Combat {
         List<Attack> attacksThatHit = new ArrayList<>();
         List<Integer> rolls = new ArrayList<>();
         int hits = 0;
+        StringBuilder sb = new StringBuilder();
         for (Attack attack : attacks) {
             int toHitDifference = attack.getOffensiveSkill() - defender.getDefensiveSkill();
             SpecialRule.trigger(Event.TO_HIT_MODIFIER, attack, defender);
@@ -62,14 +63,20 @@ public class Combat {
             SpecialRule.trigger(Event.getEventForToHitRoll(roll), attack, defender);
             rolls.add(roll);
             if (attack.isAutoHit() || ((roll >= neededRoll && roll != 1) || roll == 6)) {
+                if (attack.isAutoHit()) {
+                    sb.append("auto,");
+                } else {
+                    sb.append(roll).append(",");
+                }
                 hits++;
                 attacksThatHit.add(attack);
             }
         }
-        String collect = rolls.stream().sorted().map(String::valueOf)
-                .collect(Collectors.joining(","));
+        if (!sb.isEmpty()) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
         if (!attacks.isEmpty()) {
-            System.out.println("to hit rolls:\n" + collect + "\n" + hits + " hit(s)!\n");
+            System.out.println("to hit rolls:\n" + sb + "\n" + hits + " hit(s)!\n");
         }
         return attacksThatHit;
     }
@@ -166,7 +173,7 @@ public class Combat {
                 if (modelAtPosition.isPresent()) {
                     Model model = modelAtPosition.get();
                     int fier = attackers.isLineFormation() ? 2 : 1;
-                    List<Attack> modelAttacks = model.getAttacks(rank, fier, attackers.isCharging(), attackers.isCharged());
+                    List<Attack> modelAttacks = model.getAttacks(rank, fier, attackers.isCharging(), attackers.isCharged(), initiative);
                     totalAttacks.addAll(modelAttacks);
                 }
             }
@@ -179,7 +186,9 @@ public class Combat {
         List<Attack> validAttacks = attacksForAgility.stream()
                 .filter(attack -> attack.getRank() <= 2 || attack.getRank() <= 1 + attack.getFier())
                 .collect(Collectors.toList());
-        System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + initiative);
+        if (!validAttacks.isEmpty()) {
+            System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + initiative);
+        }
         return validAttacks;
     }
 

@@ -42,7 +42,7 @@ public class Model {
         return defensiveProfile.defensiveSkill();
     }
 
-    public List<Attack> getAttacks(int rank, int fier, boolean charging, boolean charged) {
+    public List<Attack> getAttacks(int rank, int fier, boolean charging, boolean charged, int agility) {
         List<Attack> attacks = new ArrayList<>();
         for (OffensiveProfile offensiveProfile : offensiveProfiles) {
             int numberOfAttacks = rank == 1 ? offensiveProfile.attacks() : height.getSupportingAttacks();
@@ -51,7 +51,7 @@ public class Model {
                 attacks.add(attack);
             }
         }
-        if (charging) {
+        if (charging && agility == 10) {
             OffensiveProfile offensiveProfile = offensiveProfiles.size() == 1
                     ? offensiveProfiles.get(0)
                     : offensiveProfiles.stream()

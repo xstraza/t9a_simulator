@@ -195,30 +195,40 @@ public class HighElfFactory extends ModelFactory {
     }
 
     public static Model createReaverChariot() {
-        List<SpecialRule> attackAttributesCrew1 = new ArrayList<>();
-        attackAttributesCrew1.add(SpecialRule.lightningReflexes());
-        OffensiveProfile offensiveProfileCrew1 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1, List.of());
-
-        List<SpecialRule> attackAttributesCrew2 = new ArrayList<>();
-        attackAttributesCrew2.add(SpecialRule.lightningReflexes());
-        OffensiveProfile offensiveProfileCrew2 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1, List.of());
-
-        List<SpecialRule> specialRulesHorse1 = new ArrayList<>();
-        specialRulesHorse1.add(SpecialRule.harnessed());
-        OffensiveProfile offensiveProfileHorse1 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse1, List.of());
-
-        List<SpecialRule> specialRulesHorse2 = new ArrayList<>();
-        specialRulesHorse2.add(SpecialRule.harnessed());
-        OffensiveProfile offensiveProfileHorse2 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse2, List.of());
-
-        List<SpecialRule> attackAttributesChassis = new ArrayList<>();
-        attackAttributesChassis.add(SpecialRule.inanimate());
-        OffensiveProfile offensiveProfileChassis = new OffensiveProfile(-1, -1, 5, 2, -1, WeaponFactory.aHandWeapon(), attackAttributesChassis, List.of(new ImpactHits(() -> Roll.D6() + 1)));
+        List<SpecialRule> specialRules = new ArrayList<>();
+        specialRules.add(SpecialRule.lightningReflexes());
+        specialRules.add(new MultipleWounds(model -> switch (model.getHeight()) {
+            case STANDARD -> 1;
+            case LARGE -> model.getType() == ModelType.CAVALRY || model.getType() == ModelType.BEAST
+                    ? 2
+                    : 1;
+            case GIGANTIC -> 2;
+        }));
+        OffensiveProfile offensiveProfileCrew1 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), specialRules, List.of());
+        OffensiveProfile offensiveProfileCrew2 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), specialRules, List.of());
+        OffensiveProfile offensiveProfileHorse1 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), List.of(SpecialRule.harnessed()), List.of());
+        OffensiveProfile offensiveProfileHorse2 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), List.of(SpecialRule.harnessed()), List.of());
+        OffensiveProfile offensiveProfileChassis = new OffensiveProfile(-1, -1, 5, 2, -1, WeaponFactory.aHandWeapon(), List.of(SpecialRule.inanimate()), List.of(new ImpactHits(Roll::D6)));
 
         DefensiveProfile defensiveProfile = new DefensiveProfile(3, 4, 4, 2, Collections.emptyList(), Collections.emptyList());
         return createLargeConstruct()
                 .name("Reaver Chariot")
                 .offensiveProfiles(List.of(offensiveProfileCrew1, offensiveProfileCrew2, offensiveProfileHorse1, offensiveProfileHorse2, offensiveProfileChassis))
+                .defensiveProfile(defensiveProfile)
+                .build();
+    }
+
+    public static Model createLionChariot() {
+        OffensiveProfile offensiveProfileCrew1 = new OffensiveProfile(1, 5, 4, 1, 5, WeaponFactory.aGreatWeapon(), List.of(SpecialRule.lightningReflexes()), List.of());
+        OffensiveProfile offensiveProfileCrew2 = new OffensiveProfile(1, 5, 4, 1, 5, WeaponFactory.aGreatWeapon(), List.of(SpecialRule.lightningReflexes()), List.of());
+        OffensiveProfile offensiveProfileLion1 = new OffensiveProfile(2, 5, 5, 2, 4, WeaponFactory.aHandWeapon(), List.of(SpecialRule.harnessed()), List.of());
+        OffensiveProfile offensiveProfileLion2 = new OffensiveProfile(2, 5, 5, 2, 4, WeaponFactory.aHandWeapon(), List.of(SpecialRule.harnessed()), List.of());
+        OffensiveProfile offensiveProfileChassis = new OffensiveProfile(-1, -1, 5, 2, -1, WeaponFactory.aHandWeapon(), List.of(SpecialRule.inanimate()), List.of(new ImpactHits(() -> Roll.D6() + 1)));
+
+        DefensiveProfile defensiveProfile = new DefensiveProfile(4, 5, 4, 2, List.of(ArmorFactory.heavyArmor()), Collections.emptyList());
+        return createLargeConstruct()
+                .name("Lion Chariot")
+                .offensiveProfiles(List.of(offensiveProfileCrew1, offensiveProfileCrew2, offensiveProfileLion1, offensiveProfileLion2, offensiveProfileChassis))
                 .defensiveProfile(defensiveProfile)
                 .build();
     }

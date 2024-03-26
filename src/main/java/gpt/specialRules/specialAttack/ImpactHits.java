@@ -24,7 +24,7 @@ public class ImpactHits extends SpecialAttack {
         System.out.println("Rolled " + hits + " impact hit(s)!");
         for (int i = 0; i < hits; i++) {
             Attack attack = new Attack(
-                    new OffensiveProfile(1, 0, strength, ap, 10, WeaponFactory.aHandWeapon(), Collections.emptyList(), Collections.emptyList()),
+                    new OffensiveProfile(1, -1, strength, ap, 10, WeaponFactory.aHandWeapon(), Collections.emptyList(), Collections.emptyList()),
                     1, 0, true, false, true);
             attacks.add(attack);
         }

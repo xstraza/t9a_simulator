@@ -12,7 +12,7 @@ public class Main {
         double sumRemainingUnit1 = 0;
         double sumRemainingUnit2 = 0;
         Model model1 = HighElfFactory.createSwordMaster();
-        Model model2 = HighElfFactory.createReaverChariot();
+        Model model2 = HighElfFactory.createLionChariot();
         for (int i = 0; i < count; i++) {
             Unit unit1 = new Unit(10, model1, 5, false, true);
             Unit unit2 = new Unit(1, model2, 1, true, false);
