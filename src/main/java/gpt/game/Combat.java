@@ -68,7 +68,9 @@ public class Combat {
         }
         String collect = rolls.stream().sorted().map(String::valueOf)
                 .collect(Collectors.joining(","));
-        System.out.println("to hit rolls:\n" + collect + "\n" + hits + " hit(s)!\n");
+        if (!attacks.isEmpty()) {
+            System.out.println("to hit rolls:\n" + collect + "\n" + hits + " hit(s)!\n");
+        }
         return attacksThatHit;
     }
 
@@ -89,7 +91,9 @@ public class Combat {
         }
         String collect = rolls.stream().sorted().map(String::valueOf)
                 .collect(Collectors.joining(","));
-        System.out.println("to wound rolls:\n" + collect + "\n" + wounds + " wound(s)!\n");
+        if (!attacks.isEmpty()) {
+            System.out.println("to wound rolls:\n" + collect + "\n" + wounds + " wound(s)!\n");
+        }
         return attacksThatWounded;
     }
 
@@ -118,7 +122,9 @@ public class Combat {
         }
         String collect = rolls.stream().sorted().map(String::valueOf)
                 .collect(Collectors.joining(","));
-        System.out.println("armor save rolls:\n" + collect + "\n" + savesMade + " armor save(s) made!\n");
+        if (!attacks.isEmpty()) {
+            System.out.println("armor save rolls:\n" + collect + "\n" + savesMade + " armor save(s) made out of " + rolls.size() + "!\n");
+        }
         return attacksNotArmorSaved;
     }
 
@@ -146,7 +152,9 @@ public class Combat {
         }
         String collect = rolls.stream().sorted().map(String::valueOf)
                 .collect(Collectors.joining(","));
-        System.out.println("special save rolls:\n" + collect + "\n" + savesMade + " special save(s) made!\n");
+        if (!attacks.isEmpty()) {
+            System.out.println("special save rolls:\n" + collect + "\n" + savesMade + " special save(s) made out of " + rolls.size() + "!\n");
+        }
         return attacksNotSpecialSaved;
     }
 
@@ -168,7 +176,7 @@ public class Combat {
                 .filter(a -> a.getAgility() == initiative)
                 .collect(Collectors.toList());
         attacksForAgility.forEach(attack -> SpecialRule.trigger(() -> Event.DETERMINE_ATTACKS, attack, defenders.getModel()));
-        List<Attack> validAttacks =  attacksForAgility.stream()
+        List<Attack> validAttacks = attacksForAgility.stream()
                 .filter(attack -> attack.getRank() <= 2 || attack.getRank() <= 1 + attack.getFier())
                 .collect(Collectors.toList());
         System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + initiative);

@@ -8,14 +8,14 @@ import gpt.model.factory.HighElfFactory;
 public class Main {
 
     public static void main(String[] args) {
-        int count = 100;
+        int count = 1;
         double sumRemainingUnit1 = 0;
         double sumRemainingUnit2 = 0;
         Model model1 = HighElfFactory.createSwordMaster();
-        Model model2 = HighElfFactory.createFlameWarden();
+        Model model2 = HighElfFactory.createReaverChariot();
         for (int i = 0; i < count; i++) {
             Unit unit1 = new Unit(10, model1, 5, false);
-            Unit unit2 = new Unit(15, model2, 5, true);
+            Unit unit2 = new Unit(1, model2, 1, true);
             Combat.combat(unit1, unit2);
 
             System.out.println("Remaining " + unit1.getModel() + ": " + unit1.getNumberOfModels());
