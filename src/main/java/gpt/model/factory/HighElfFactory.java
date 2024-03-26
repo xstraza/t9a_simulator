@@ -7,9 +7,10 @@ import gpt.model.Model;
 import gpt.model.ModelType;
 import gpt.model.OffensiveProfile;
 import gpt.specialRules.SpecialRule;
-import gpt.specialRules.attribute.general.*;
+import gpt.specialRules.attribute.general.MultipleWounds;
 import gpt.specialRules.attribute.hbe.SwordSworn;
 import gpt.specialRules.protection.general.Aegis;
+import gpt.specialRules.specialAttack.ImpactHits;
 import gpt.util.Roll;
 import gpt.weapon.WeaponFactory;
 
@@ -21,12 +22,12 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createHighbornLancer() {
         List<SpecialRule> attackAttributesElf = new ArrayList<>();
-        attackAttributesElf.add(new LightningReflexes());
-        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLance(), attackAttributesElf);
+        attackAttributesElf.add(SpecialRule.lightningReflexes());
+        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLance(), attackAttributesElf, List.of());
 
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new Harnessed());
-        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRules);
+        specialRules.add(SpecialRule.harnessed());
+        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.heavyArmor());
@@ -42,12 +43,12 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createEleinReaver() {
         List<SpecialRule> attackAttributesElf = new ArrayList<>();
-        attackAttributesElf.add(new LightningReflexes());
-        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesElf);
+        attackAttributesElf.add(SpecialRule.lightningReflexes());
+        OffensiveProfile offensiveProfileElf = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesElf, List.of());
 
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new Harnessed());
-        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRules);
+        specialRules.add(SpecialRule.harnessed());
+        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
@@ -62,8 +63,8 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createSeaGuard() {
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new LightningReflexes());
-        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 3, 0, 5, WeaponFactory.aHandWeapon(), specialRules);
+        specialRules.add(SpecialRule.lightningReflexes());
+        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 3, 0, 5, WeaponFactory.aHandWeapon(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
@@ -79,9 +80,9 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createSpearman() {
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new LightningReflexes());
-        specialRules.add(new FightInExtraRank());
-        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aSpear(), specialRules);
+        specialRules.add(SpecialRule.lightningReflexes());
+        specialRules.add(SpecialRule.fightInExtraRank());
+        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aSpear(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
@@ -97,8 +98,8 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createArcher() {
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new LightningReflexes());
-        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aHandWeapon(), specialRules);
+        specialRules.add(SpecialRule.lightningReflexes());
+        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aHandWeapon(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.lightArmor());
@@ -113,7 +114,7 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createLionGuard() {
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new LightningReflexes());
+        specialRules.add(SpecialRule.lightningReflexes());
         specialRules.add(new MultipleWounds(model -> switch (model.getHeight()) {
             case STANDARD -> 1;
             case LARGE -> model.getType() == ModelType.CAVALRY || model.getType() == ModelType.BEAST
@@ -121,7 +122,7 @@ public class HighElfFactory extends ModelFactory {
                     : 1;
             case GIGANTIC -> 2;
         }));
-        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 4, 1, 5, WeaponFactory.aGreatWeapon(), specialRules);
+        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 4, 1, 5, WeaponFactory.aGreatWeapon(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.heavyArmor());
@@ -137,9 +138,9 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createSwordMaster() {
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new LightningReflexes());
+        specialRules.add(SpecialRule.lightningReflexes());
         specialRules.add(new SwordSworn());
-        OffensiveProfile offensiveProfile = new OffensiveProfile(2, 6, 3, 0, 6, WeaponFactory.aGreatWeapon(), specialRules);
+        OffensiveProfile offensiveProfile = new OffensiveProfile(2, 6, 3, 0, 6, WeaponFactory.aGreatWeapon(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.heavyArmor());
@@ -154,9 +155,9 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createFlameWarden() {
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new LightningReflexes());
-        specialRules.add(new FightInExtraRank());
-        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 3, 0, 6, WeaponFactory.aHalberd(), specialRules);
+        specialRules.add(SpecialRule.lightningReflexes());
+        specialRules.add(SpecialRule.fightInExtraRank());
+        OffensiveProfile offensiveProfile = new OffensiveProfile(1, 5, 3, 0, 6, WeaponFactory.aHalberd(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.heavyArmor());
@@ -174,12 +175,12 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createKnightOfRyma() {
         List<SpecialRule> attackAttributesElf = new ArrayList<>();
-        attackAttributesElf.add(new LightningReflexes());
-        OffensiveProfile offensiveProfileElf = new OffensiveProfile(2, 5, 4, 1, 6, WeaponFactory.aLance(), attackAttributesElf);
+        attackAttributesElf.add(SpecialRule.lightningReflexes());
+        OffensiveProfile offensiveProfileElf = new OffensiveProfile(2, 5, 4, 1, 6, WeaponFactory.aLance(), attackAttributesElf, List.of());
 
         List<SpecialRule> specialRules = new ArrayList<>();
-        specialRules.add(new Harnessed());
-        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRules);
+        specialRules.add(SpecialRule.harnessed());
+        OffensiveProfile offensiveProfileHorse = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRules, List.of());
 
         List<Armor> armors = new ArrayList<>();
         armors.add(ArmorFactory.dragonForgedArmor());
@@ -195,25 +196,24 @@ public class HighElfFactory extends ModelFactory {
 
     public static Model createReaverChariot() {
         List<SpecialRule> attackAttributesCrew1 = new ArrayList<>();
-        attackAttributesCrew1.add(new LightningReflexes());
-        OffensiveProfile offensiveProfileCrew1 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1);
+        attackAttributesCrew1.add(SpecialRule.lightningReflexes());
+        OffensiveProfile offensiveProfileCrew1 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1, List.of());
 
         List<SpecialRule> attackAttributesCrew2 = new ArrayList<>();
-        attackAttributesCrew2.add(new LightningReflexes());
-        OffensiveProfile offensiveProfileCrew2 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1);
+        attackAttributesCrew2.add(SpecialRule.lightningReflexes());
+        OffensiveProfile offensiveProfileCrew2 = new OffensiveProfile(1, 4, 3, 0, 5, WeaponFactory.aLightLance(), attackAttributesCrew1, List.of());
 
         List<SpecialRule> specialRulesHorse1 = new ArrayList<>();
-        specialRulesHorse1.add(new Harnessed());
-        OffensiveProfile offensiveProfileHorse1 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse1);
+        specialRulesHorse1.add(SpecialRule.harnessed());
+        OffensiveProfile offensiveProfileHorse1 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse1, List.of());
 
         List<SpecialRule> specialRulesHorse2 = new ArrayList<>();
-        specialRulesHorse2.add(new Harnessed());
-        OffensiveProfile offensiveProfileHorse2 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse2);
+        specialRulesHorse2.add(SpecialRule.harnessed());
+        OffensiveProfile offensiveProfileHorse2 = new OffensiveProfile(1, 3, 3, 0, 4, WeaponFactory.aHandWeapon(), specialRulesHorse2, List.of());
 
         List<SpecialRule> attackAttributesChassis = new ArrayList<>();
-        attackAttributesChassis.add(new Inanimate());
-        attackAttributesChassis.add(new ImpactHits(() -> Roll.D6() + 1));
-        OffensiveProfile offensiveProfileChassis = new OffensiveProfile(-1, -1, 5, 2, -1, WeaponFactory.aHandWeapon(), attackAttributesChassis);
+        attackAttributesChassis.add(SpecialRule.inanimate());
+        OffensiveProfile offensiveProfileChassis = new OffensiveProfile(-1, -1, 5, 2, -1, WeaponFactory.aHandWeapon(), attackAttributesChassis, List.of(new ImpactHits(() -> Roll.D6() + 1)));
 
         DefensiveProfile defensiveProfile = new DefensiveProfile(3, 4, 4, 2, Collections.emptyList(), Collections.emptyList());
         return createLargeConstruct()

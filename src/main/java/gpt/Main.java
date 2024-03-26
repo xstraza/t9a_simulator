@@ -14,8 +14,8 @@ public class Main {
         Model model1 = HighElfFactory.createSwordMaster();
         Model model2 = HighElfFactory.createReaverChariot();
         for (int i = 0; i < count; i++) {
-            Unit unit1 = new Unit(10, model1, 5, false);
-            Unit unit2 = new Unit(1, model2, 1, true);
+            Unit unit1 = new Unit(10, model1, 5, false, true);
+            Unit unit2 = new Unit(1, model2, 1, true, false);
             Combat.combat(unit1, unit2);
 
             System.out.println("Remaining " + unit1.getModel() + ": " + unit1.getNumberOfModels());

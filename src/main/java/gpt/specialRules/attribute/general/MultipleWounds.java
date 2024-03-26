@@ -4,6 +4,7 @@ import gpt.specialRules.Attack;
 import gpt.specialRules.SpecialRule;
 import gpt.specialRules.Event;
 import gpt.model.Model;
+import gpt.specialRules.SpecialRuleType;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -31,5 +32,10 @@ public class MultipleWounds implements SpecialRule {
                 ? conditionalWoundFunction.apply(defender)
                 : woundSupplier.get();
         attack.setWoundMultiplier(woundAmount);
+    }
+
+    @Override
+    public SpecialRuleType getSpecialRuleType() {
+        return SpecialRuleType.MULTIPLE_WOUNDS;
     }
 }

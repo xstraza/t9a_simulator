@@ -13,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FightInExtraRankTest {
 
     private Unit getSpearmanUnit(int size, int frontage) {
-        return new Unit(size, HighElfFactory.createSpearman(), frontage, true);
+        return new Unit(size, HighElfFactory.createSpearman(), frontage, false, false);
     }
 
     private void testFier(int size, int frontage, int expected) {
-        List<Attack> attacks = Combat.getAttacks(getSpearmanUnit(size, frontage));
-        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.DETERMINE_ATTACKS, attack, HighElfFactory.createArcher()));
-        attacks = Combat.removeInvalidAttacks(attacks);
+        Unit spearmanUnit = getSpearmanUnit(size, frontage);
+        List<Attack> attacks = Combat.getAttacks(spearmanUnit, spearmanUnit, spearmanUnit.getModel().getAgilities().get(0));
+        attacks.forEach(attack -> SpecialRule.trigger(Event.DETERMINE_ATTACKS, attack, HighElfFactory.createArcher()));
         assertEquals(expected, attacks.size());
     }
 

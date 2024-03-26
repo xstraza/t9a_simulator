@@ -4,6 +4,7 @@ import gpt.model.Model;
 import gpt.specialRules.Attack;
 import gpt.specialRules.Event;
 import gpt.specialRules.SpecialRule;
+import gpt.specialRules.SpecialRuleType;
 
 public class Inanimate implements SpecialRule {
     @Override
@@ -12,5 +13,10 @@ public class Inanimate implements SpecialRule {
             return;
         }
         attack.setRank(100);
+    }
+
+    @Override
+    public SpecialRuleType getSpecialRuleType() {
+        return SpecialRuleType.INANIMATE;
     }
 }

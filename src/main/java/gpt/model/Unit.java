@@ -14,12 +14,15 @@ public class Unit {
     private int frontage;
     @Getter
     private boolean charging;
+    @Getter
+    private boolean charged;
 
-    public Unit(int numberOfModels, Model model, int frontage, boolean charging) {
+    public Unit(int numberOfModels, Model model, int frontage, boolean charging, boolean charged) {
         this.numberOfModels = numberOfModels;
         this.model = model;
         this.frontage = frontage;
         this.charging = charging;
+        this.charged = charged;
     }
 
     public void reduceModels(int wounds) {

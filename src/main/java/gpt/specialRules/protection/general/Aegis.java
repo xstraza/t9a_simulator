@@ -4,6 +4,7 @@ import gpt.model.Model;
 import gpt.specialRules.Attack;
 import gpt.specialRules.Event;
 import gpt.specialRules.SpecialRule;
+import gpt.specialRules.SpecialRuleType;
 
 import java.util.function.Function;
 
@@ -30,5 +31,10 @@ public class Aegis implements SpecialRule {
             int roll = Math.min(defender.getSpecialSave(), min);
             defender.setSpecialSave(roll);
         }
+    }
+
+    @Override
+    public SpecialRuleType getSpecialRuleType() {
+        return SpecialRuleType.AEGIS;
     }
 }

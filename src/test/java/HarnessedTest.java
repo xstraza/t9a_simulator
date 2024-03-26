@@ -1,8 +1,8 @@
 import gpt.game.Combat;
-import gpt.specialRules.Attack;
-import gpt.specialRules.Event;
 import gpt.model.Unit;
 import gpt.model.factory.HighElfFactory;
+import gpt.specialRules.Attack;
+import gpt.specialRules.Event;
 import gpt.specialRules.SpecialRule;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HarnessedTest {
 
     private Unit getLancerUnit(int size, int frontage) {
-        return new Unit(size, HighElfFactory.createHighbornLancer(), frontage, true);
+        return new Unit(size, HighElfFactory.createHighbornLancer(), frontage, true, false);
     }
 
     private void testHarnessed(int size, int frontage, int expected) {
-        List<Attack> attacks = Combat.getAttacks(getLancerUnit(size, frontage));
-        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.DETERMINE_ATTACKS, attack, HighElfFactory.createArcher()));
-        attacks = Combat.removeInvalidAttacks(attacks);
-        assertEquals(expected, attacks.size());
+        Unit lancerUnit = getLancerUnit(size, frontage);
+        List<Attack> attacks = Combat.getAttacks(lancerUnit, lancerUnit, lancerUnit.getModel().getAgilities().get(0) + 1);
+        List<Attack> attacksHorses = Combat.getAttacks(lancerUnit, lancerUnit, lancerUnit.getModel().getAgilities().get(1) + 1);
+        attacks.forEach(attack -> SpecialRule.trigger(Event.DETERMINE_ATTACKS, attack, HighElfFactory.createArcher()));
+        attacksHorses.forEach(attack -> SpecialRule.trigger(Event.DETERMINE_ATTACKS, attack, HighElfFactory.createArcher()));
+        assertEquals(expected, attacksHorses.size() + attacks.size());
     }
 
     @Test

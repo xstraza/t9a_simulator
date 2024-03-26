@@ -1,11 +1,10 @@
 package gpt.weapon;
 
-import gpt.specialRules.Attack;
-import gpt.specialRules.SpecialRule;
-import gpt.specialRules.Event;
-import gpt.specialRules.attribute.general.DevastatingCharge;
-import gpt.specialRules.attribute.general.FightInExtraRank;
 import gpt.model.Model;
+import gpt.specialRules.Attack;
+import gpt.specialRules.Event;
+import gpt.specialRules.SpecialRule;
+import gpt.specialRules.SpecialRuleType;
 import gpt.util.TriConsumer;
 
 import java.util.Collections;
@@ -25,10 +24,18 @@ public class WeaponFactory {
     }
 
     public static Weapon aSpear() {
-        SpecialRule spear = (event, attack, defender) -> {
-            if (event == Event.AGILITY_MODIFIER && !attack.isCharging()) {
-                attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
-                attack.getWeapon().setAgility(attack.getWeapon().getAgility() + 2);
+        SpecialRule spear = new SpecialRule() {
+            @Override
+            public void onEvent(Event event, Attack attack, Model defender) {
+                if (event == Event.AGILITY_MODIFIER && !attack.isCharging() && attack.isCharged()) {
+                    attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
+                    attack.getWeapon().setAgility(attack.getWeapon().getAgility() + 2);
+                }
+            }
+
+            @Override
+            public SpecialRuleType getSpecialRuleType() {
+                return SpecialRuleType.SPEAR;
             }
         };
         return new Weapon(
@@ -36,7 +43,7 @@ public class WeaponFactory {
                 1,
                 0,
                 1,
-                List.of(spear, new FightInExtraRank()),
+                List.of(spear, SpecialRule.fightInExtraRank()),
                 WeaponType.SPEAR);
     }
 
@@ -52,7 +59,7 @@ public class WeaponFactory {
                 0,
                 0,
                 1,
-                List.of(new DevastatingCharge(lance)),
+                List.of(SpecialRule.devastatingCharge(lance)),
                 WeaponType.LANCE
         );
     }
@@ -69,7 +76,7 @@ public class WeaponFactory {
                 0,
                 0,
                 1,
-                List.of(new DevastatingCharge(lightLance)),
+                List.of(SpecialRule.devastatingCharge(lightLance)),
                 WeaponType.LIGHT_LANCE
         );
     }

@@ -4,6 +4,7 @@ import gpt.specialRules.Attack;
 import gpt.specialRules.SpecialRule;
 import gpt.specialRules.Event;
 import gpt.model.Model;
+import gpt.specialRules.SpecialRuleType;
 
 public class FightInExtraRank implements SpecialRule {
 
@@ -13,5 +14,10 @@ public class FightInExtraRank implements SpecialRule {
             return;
         }
         attack.setFier(attack.getFier()+1);
+    }
+
+    @Override
+    public SpecialRuleType getSpecialRuleType() {
+        return SpecialRuleType.FIGHT_IN_EXTRA_RANKS;
     }
 }

@@ -1,6 +1,7 @@
 package gpt.specialRules.attribute.general;
 
 import gpt.specialRules.Attack;
+import gpt.specialRules.SpecialRuleType;
 import gpt.weapon.WeaponType;
 import gpt.specialRules.SpecialRule;
 import gpt.specialRules.Event;
@@ -17,5 +18,10 @@ public class LightningReflexes implements SpecialRule {
                 attack.setToHitModifier(attack.getToHitModifier() + 1);
             }
         }
+    }
+
+    @Override
+    public SpecialRuleType getSpecialRuleType() {
+        return SpecialRuleType.LIGHTNING_REFLEXES;
     }
 }

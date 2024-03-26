@@ -4,6 +4,7 @@ import gpt.specialRules.Attack;
 import gpt.specialRules.SpecialRule;
 import gpt.specialRules.Event;
 import gpt.model.Model;
+import gpt.specialRules.SpecialRuleType;
 
 public class Harnessed implements SpecialRule {
 
@@ -13,5 +14,10 @@ public class Harnessed implements SpecialRule {
             return;
         }
         attack.setRank(attack.getRank() == 1 ? 1 : 100);
+    }
+
+    @Override
+    public SpecialRuleType getSpecialRuleType() {
+        return SpecialRuleType.HARNESSED;
     }
 }

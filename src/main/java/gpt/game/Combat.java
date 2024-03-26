@@ -35,7 +35,7 @@ public class Combat {
     private static int attack(Unit attackers, Unit defenders, int initiative) {
         List<Attack> attacks = getAttacks(attackers, defenders, initiative);
         List<Attack> successfulAttacks = performAttacks(attacks, defenders.getModel());
-        successfulAttacks.forEach(attack -> SpecialRule.trigger(() -> Event.APPLY_MULTIPLE_WOUNDS, attack, defenders.getModel()));
+        successfulAttacks.forEach(attack -> SpecialRule.trigger(Event.APPLY_MULTIPLE_WOUNDS, attack, defenders.getModel()));
         return successfulAttacks.stream()
                 .mapToInt(Attack::getWoundsCaused)
                 .sum();
@@ -54,14 +54,14 @@ public class Combat {
         int hits = 0;
         for (Attack attack : attacks) {
             int toHitDifference = attack.getOffensiveSkill() - defender.getDefensiveSkill();
-            SpecialRule.trigger(() -> Event.TO_HIT_MODIFIER, attack, defender);
+            SpecialRule.trigger(Event.TO_HIT_MODIFIER, attack, defender);
             int toHitModifier = attack.getToHitModifier();
             int neededRoll = Tables.determineNeededToHitRoll(toHitDifference) - toHitModifier;
 
             int roll = Roll.D6();
-            SpecialRule.trigger(() -> Event.getEventForToHitRoll(roll), attack, defender);
+            SpecialRule.trigger(Event.getEventForToHitRoll(roll), attack, defender);
             rolls.add(roll);
-            if ((roll >= neededRoll && roll != 1) || roll == 6) {
+            if (attack.isAutoHit() || ((roll >= neededRoll && roll != 1) || roll == 6)) {
                 hits++;
                 attacksThatHit.add(attack);
             }
@@ -134,7 +134,7 @@ public class Combat {
         int savesMade = 0;
         for (Attack attack : attacks) {
             for (int i = 0; i < attack.getWounds(); i++) {
-                SpecialRule.trigger(() -> Event.SPECIAL_SAVE, attack, defender);
+                SpecialRule.trigger(Event.SPECIAL_SAVE, attack, defender);
                 int neededRoll = defender.getSpecialSave();
                 if (neededRoll > 6) {
                     attacksNotSpecialSaved.add(attack);
@@ -166,16 +166,16 @@ public class Combat {
                 if (modelAtPosition.isPresent()) {
                     Model model = modelAtPosition.get();
                     int fier = attackers.isLineFormation() ? 2 : 1;
-                    List<Attack> modelAttacks = model.getAttacks(rank, fier, attackers.isCharging());
+                    List<Attack> modelAttacks = model.getAttacks(rank, fier, attackers.isCharging(), attackers.isCharged());
                     totalAttacks.addAll(modelAttacks);
                 }
             }
         }
-        totalAttacks.forEach(attack -> SpecialRule.trigger(() -> Event.AGILITY_MODIFIER, attack, defenders.getModel()));
+        totalAttacks.forEach(attack -> SpecialRule.trigger(Event.AGILITY_MODIFIER, attack, defenders.getModel()));
         List<Attack> attacksForAgility = totalAttacks.stream()
                 .filter(a -> a.getAgility() == initiative)
                 .collect(Collectors.toList());
-        attacksForAgility.forEach(attack -> SpecialRule.trigger(() -> Event.DETERMINE_ATTACKS, attack, defenders.getModel()));
+        attacksForAgility.forEach(attack -> SpecialRule.trigger(Event.DETERMINE_ATTACKS, attack, defenders.getModel()));
         List<Attack> validAttacks = attacksForAgility.stream()
                 .filter(attack -> attack.getRank() <= 2 || attack.getRank() <= 1 + attack.getFier())
                 .collect(Collectors.toList());
