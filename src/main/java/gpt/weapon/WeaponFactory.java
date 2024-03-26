@@ -26,7 +26,7 @@ public class WeaponFactory {
 
     public static Weapon aSpear() {
         SpecialRule spear = (event, attack, defender) -> {
-            if (event == Event.CHARGE && !attack.isCharging()) {
+            if (event == Event.AGILITY_MODIFIER && !attack.isCharging()) {
                 attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
                 attack.getWeapon().setAgility(attack.getWeapon().getAgility() + 2);
             }
@@ -42,7 +42,7 @@ public class WeaponFactory {
 
     public static Weapon aLance() {
         TriConsumer<Event, Attack, Model> lance = (event, attack, defender) -> {
-            if (event == Event.CHARGE && attack.isCharging()) {
+            if (event == Event.AGILITY_MODIFIER && attack.isCharging()) {
                 attack.getWeapon().setStrength(attack.getWeapon().getStrength() + 2);
                 attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 2);
             }
@@ -59,7 +59,7 @@ public class WeaponFactory {
 
     public static Weapon aLightLance() {
         TriConsumer<Event, Attack, Model> lightLance = (event, attack, defender) -> {
-            if (event == Event.CHARGE && attack.isCharging()) {
+            if (event == Event.AGILITY_MODIFIER && attack.isCharging()) {
                 attack.getWeapon().setStrength(attack.getWeapon().getStrength() + 1);
                 attack.getWeapon().setArmorPenetration(attack.getWeapon().getArmorPenetration() + 1);
             }

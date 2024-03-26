@@ -9,7 +9,7 @@ public class ChargeAgilityBonus implements SpecialRule {
 
     @Override
     public void onEvent(Event event, Attack attack, Model defender) {
-        if (event != Event.CHARGE) {
+        if (event != Event.AGILITY_MODIFIER) {
             return;
         }
         if (attack.isCharging()) {

@@ -1,20 +1,21 @@
 package gpt.model.factory;
 
 import gpt.armor.Armor;
+import gpt.armor.ArmorFactory;
+import gpt.model.DefensiveProfile;
+import gpt.model.Model;
+import gpt.model.ModelType;
+import gpt.model.OffensiveProfile;
 import gpt.specialRules.SpecialRule;
-import gpt.specialRules.attribute.general.Inanimate;
 import gpt.specialRules.attribute.general.*;
 import gpt.specialRules.attribute.hbe.SwordSworn;
-import gpt.armor.ArmorFactory;
 import gpt.specialRules.protection.general.Aegis;
 import gpt.util.Roll;
 import gpt.weapon.WeaponFactory;
-import gpt.model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class HighElfFactory extends ModelFactory {
 

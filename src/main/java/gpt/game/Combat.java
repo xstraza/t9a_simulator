@@ -150,32 +150,27 @@ public class Combat {
         return attacksNotSpecialSaved;
     }
 
-    public static List<Attack> removeInvalidAttacks(List<Attack> attacks) {
-        return attacks.stream()
-                .filter(attack -> attack.getRank() <= 2 || attack.getRank() <= 1 + attack.getFier())
-                .collect(Collectors.toList());
-    }
-
     public static List<Attack> getAttacks(Unit attackers, Unit defenders, int initiative) {
-        List<Attack> attacks = new ArrayList<>();
-        int maxModelsInUnit = (attackers.getNumberOfModels() + attackers.getFrontage() - 1) / attackers.getFrontage() * attackers.getFrontage();
-        for (int rank = 1; rank <= maxModelsInUnit / attackers.getFrontage(); rank++) {
+        List<Attack> totalAttacks = new ArrayList<>();
+        for (int rank = 1; rank <= attackers.getMaxRanks(); rank++) {
             for (int file = 1; file <= attackers.getFrontage(); file++) {
                 Optional<Model> modelAtPosition = attackers.getModelAtPosition(rank, file);
                 if (modelAtPosition.isPresent()) {
                     Model model = modelAtPosition.get();
                     int fier = attackers.isLineFormation() ? 2 : 1;
-                    attacks.addAll(model.getAttacks(rank, fier, attackers.isCharging()));
+                    List<Attack> modelAttacks = model.getAttacks(rank, fier, attackers.isCharging());
+                    totalAttacks.addAll(modelAttacks);
                 }
             }
         }
-        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.AGILITY_MODIFIER, attack, defenders.getModel()));
-        attacks.forEach(attack -> SpecialRule.trigger(() -> Event.CHARGE, attack, defenders.getModel()));
-        List<Attack> attacksForAgility = attacks.stream()
+        totalAttacks.forEach(attack -> SpecialRule.trigger(() -> Event.AGILITY_MODIFIER, attack, defenders.getModel()));
+        List<Attack> attacksForAgility = totalAttacks.stream()
                 .filter(a -> a.getAgility() == initiative)
                 .collect(Collectors.toList());
         attacksForAgility.forEach(attack -> SpecialRule.trigger(() -> Event.DETERMINE_ATTACKS, attack, defenders.getModel()));
-        List<Attack> validAttacks = removeInvalidAttacks(attacksForAgility);
+        List<Attack> validAttacks =  attacksForAgility.stream()
+                .filter(attack -> attack.getRank() <= 2 || attack.getRank() <= 1 + attack.getFier())
+                .collect(Collectors.toList());
         System.out.println(attackers.getModel() + " unit has " + validAttacks.size() + " attacks at agility " + initiative);
         return validAttacks;
     }

@@ -57,4 +57,8 @@ public class Unit {
             return Optional.empty();
         }
     }
+
+    public int getMaxRanks() {
+        return ((numberOfModels + frontage - 1) / frontage * frontage) / frontage;
+    }
 }
