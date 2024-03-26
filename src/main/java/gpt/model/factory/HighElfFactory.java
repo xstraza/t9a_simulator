@@ -179,5 +179,17 @@ public class HighElfFactory extends ModelFactory {
                 .defensiveProfile(defensiveProfile)
                 .build();
     }
+
+    public static Model createGiantEagle() {
+        OffensiveProfile offensiveProfile = new OffensiveProfile(2, 5, 4, 1, 4, WeaponFactory.aHandWeapon(), Collections.emptyList(), Collections.emptyList());
+
+        DefensiveProfile defensiveProfile = new DefensiveProfile(3, 5, 4, 0, Collections.emptyList(), Collections.emptyList());
+
+        return createLargeBeast()
+                .name("Giant Eagle")
+                .offensiveProfiles(List.of(offensiveProfile))
+                .defensiveProfile(defensiveProfile)
+                .build();
+    }
 }
 

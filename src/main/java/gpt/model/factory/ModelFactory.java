@@ -26,4 +26,11 @@ public abstract class ModelFactory {
                 .type(ModelType.CONSTRUCT)
                 .height(Height.LARGE);
     }
+
+    public static Model.ModelBuilder createLargeBeast() {
+        return Model.builder()
+                .specialSave(10)
+                .type(ModelType.BEAST)
+                .height(Height.LARGE);
+    }
 }
